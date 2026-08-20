@@ -11,7 +11,14 @@
      Không sao vì lúc đặt hàng server vẫn tính lại từ đầu. */
   function loadCatalog() {
     return VJ.api.get("shop_products").then(function (res) {
-      if (!res || !res.ok) throw new Error(res && res.error ? res.error : "Không tải được bảng giá");
+      /* Phải kiểm CÓ MẢNG products, không được chỉ kiểm res.ok.
+         Backend chưa deploy 80_shop.gs thì doGet rơi vào nhánh default và vẫn trả
+         {ok:true, msg:"VJ-POS API", actions:[...]} — không hề có products. Nếu chỉ
+         xét res.ok thì trang tưởng đã lấy được giá mới, âm thầm bán theo giá dự phòng
+         trong products.js mà không cảnh báo ai. */
+      if (!res || !res.ok || !Array.isArray(res.products) || !res.products.length) {
+        throw new Error(res && res.error ? res.error : "Backend chưa có endpoint shop_products");
+      }
 
       var priceMap = {};
       (res.products || []).forEach(function (p) {

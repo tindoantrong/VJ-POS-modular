@@ -1,0 +1,7 @@
+# Ảnh gốc chưa nén — chỉ commit bản .jpg đã tối ưu. Xem assets/img/README.md
+assets/img/*.png
+
+# File tạm khi test
+_smoketest.html
+_shoptest.html
+.playwright-mcp/

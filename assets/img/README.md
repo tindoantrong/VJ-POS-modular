@@ -1,21 +1,39 @@
 # Ảnh sản phẩm cho trang bán hàng
 
-Lưu 4 ảnh anh gửi vào đây, **đúng tên file** dưới đây (phân biệt hoa thường):
+## File đang dùng (đã tối ưu, lên git)
 
-| Tên file | Ảnh nào |
-|---|---|
-| `st25-banner.jpg` | Banner ST25 — có bao gạo, tô cơm, chữ "GẠO ST25" |
-| `st25-grains.jpg` | Ảnh ghép hạt gạo ST25 (thúng tre + thìa gỗ + bông lúa) |
-| `st500-banner.jpg` | Banner ST500 — có bao gạo, tô cơm, chữ "GẠO ST500" |
-| `st500-grains.jpg` | Ảnh ghép hạt gạo ST500 |
+| File | Nội dung | Dung lượng |
+|---|---|---|
+| `st25-banner.jpg` | Banner ST25 — bao gạo + tô cơm | ~248 KB |
+| `st25-grains.jpg` | Ảnh ghép hạt gạo ST25 | ~184 KB |
+| `st500-banner.jpg` | Banner ST500 — bao gạo + tô cơm | ~228 KB |
+| `st500-grains.jpg` | Ảnh ghép hạt gạo ST500 | ~164 KB |
 
-Đường dẫn được khai báo ở `assets/js/shop/products.js`. Đổi tên file thì sửa ở đó.
+Đường dẫn khai báo ở `assets/js/shop/products.js` (`img` và `imgGrains`).
 
-**Chưa có ảnh trang vẫn chạy bình thường** — thẻ sản phẩm tự hiện khối thay thế
-(biểu tượng bông lúa + tên sản phẩm) thay vì để vỡ layout.
+## File gốc (KHÔNG lên git)
 
-## Nên tối ưu trước khi đưa lên
+Bản PNG gốc `st25_bao_bi.png`, `st25_chi_tiet.png`, `st_500_bao_bi.png`,
+`st500_chi_tiet.png` nằm trong `.gitignore` — **8.4 MB** cho 4 ảnh là quá nặng để
+đưa vào lịch sử git vĩnh viễn, trong khi bản JPG đã tối ưu chỉ tốn 824 KB mà nhìn
+không khác gì trên màn hình điện thoại.
 
-Ảnh gốc khá nặng, khách dùng 3G sẽ đợi lâu. Nên resize bề ngang còn ~1200px và
-nén xuống dưới 200KB mỗi ảnh (dùng squoosh.app hoặc tinyjpg.com). Cân nhắc xuất
-thêm bản `.webp` nếu muốn nhẹ hơn nữa.
+File gốc vẫn còn trên máy, chỉ là không commit. Muốn đưa cả gốc lên git thì xoá
+dòng tương ứng trong `.gitignore`.
+
+## Nén lại khi thay ảnh mới
+
+```bash
+cd assets/img
+ffmpeg -y -i ANH_GOC.png -vf scale=1200:-2 -q:v 4 ten-file-dich.jpg
+```
+
+`-q:v` từ 2 (đẹp nhất, nặng) tới 6 (nhẹ, bắt đầu thấy vỡ). 4 là mức cân bằng tốt.
+
+> ⚠️ Đừng gõ `convert` trên máy Windows này — `convert.exe` của Windows là công cụ
+> đổi FAT sang NTFS, không phải ImageMagick. Dùng `ffmpeg`.
+
+## Thiếu ảnh thì sao?
+
+Trang vẫn chạy bình thường: thẻ sản phẩm tự hiện khối thay thế (biểu tượng bông lúa
++ tên sản phẩm) thay vì để vỡ layout. Xem `onError` trong `shop/ui/ProductCard.js`.
