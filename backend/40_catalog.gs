@@ -120,7 +120,6 @@ function getProducts() {
   const cNhom = _col_(h, SCHEMA.Admin_Products.requiredAnyOf.nhom_hang);
   const cBrand = _col_(h, SCHEMA.Admin_Products.requiredAnyOf.brand);
   const cPrice = _col_(h, SCHEMA.Admin_Products.requiredAnyOf.price);
-  const cCost = _col_(h, SCHEMA.Admin_Products.requiredAnyOf.cost);
   const cQty = _col_(h, SCHEMA.Admin_Products.requiredAnyOf.qty);
   const cImg = _col_(h, SCHEMA.Admin_Products.requiredAnyOf.img);
   const cActive = _col_(h, SCHEMA.Admin_Products.requiredAnyOf.active);
@@ -143,7 +142,6 @@ function getProducts() {
     const displayName = tenHang || nhomHang || String(pid);
 
     const price = _asNum_((cPrice >= 0) ? row[cPrice] : row[5], 0);
-    const cost = _asNum_((cCost >= 0) ? row[cCost] : row[6], 0);
     const qtyRaw = _asNum_((cQty >= 0) ? row[cQty] : row[7], 0);
     const img = String((cImg >= 0) ? row[cImg] : (row[8] || ""));
 
@@ -154,7 +152,9 @@ function getProducts() {
       cat: nhomHang,        // frontend dùng cat để gom nhóm
       brand: brand,
       price: price,
-      cost: cost,
+      // KHÔNG trả gia_von (giá vốn) ra API. Endpoint này ai có URL cũng gọi được, mà
+      // frontend không dùng tới giá vốn ở bất kỳ chỗ nào — trả ra chỉ tổ lộ biên lợi nhuận.
+      // Cần giá vốn để làm báo cáo thì đọc thẳng trong sheet, đừng mở lại ở đây.
       qty: isService ? 999 : qtyRaw,   // dịch vụ luôn "còn hàng"
       img: img,
       rate: artists[brand] || 0,

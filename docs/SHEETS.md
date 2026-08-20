@@ -48,12 +48,16 @@ Danh mục hàng và tồn kho.
 | nhom_hang | `nhom_hang`, `cat`, `category` | Dùng để gom nhóm / tìm kiếm |
 | brand | `brand_id`, `brand` | Khớp với `Admin_Artists.id` để lấy tỉ lệ hoa hồng |
 | price | `gia_ban`, `price` | |
-| cost | `gia_von`, `cost` | |
+| cost | `gia_von`, `cost` | ⚠️ **Không trả ra API.** Chỉ dùng khi nhập kho ghi vào sheet |
 | qty | `qty_on_hand`, `ton_kho`, `qty` | |
 | img | `image_url`, `img` | |
 | active | `active`, `is_active` | `FALSE` → ẩn khỏi app |
 
 Tên hiển thị = `ten_hang`, nếu rỗng thì lấy `nhom_hang`, rỗng nữa thì lấy `product_id`.
+
+`getProducts` **cố tình không trả `gia_von`** ra ngoài: endpoint này ai có URL cũng gọi được,
+mà frontend không dùng tới giá vốn ở chỗ nào. Cần giá vốn để làm báo cáo thì đọc thẳng trong
+sheet, đừng mở lại ở API.
 
 **Loại hàng không trừ tồn kho** (`SERVICE_TYPES` trong `00_schema.gs`):
 `Service`, `GRILLZ`, `TOOTHGEM`, `TOOTHCHARM`, `Dịch vụ` — luôn hiện tồn 999.
