@@ -353,19 +353,23 @@ def cmd_set_api(args):
 
 
 def main():
-    p = argparse.ArgumentParser(description="Quản lý spreadsheet VJ-POS")
-    p.add_argument("--sheet", help="Spreadsheet ID (lấy trong URL)")
-    p.add_argument("--key", help="Đường dẫn file key service account")
-    p.add_argument("--url", help="URL /exec của Apps Script")
+    # Khai báo ở CẢ parser cha lẫn từng subcommand để gõ kiểu nào cũng chạy:
+    #   ... --sheet X setup     và     ... setup --sheet X
+    common = argparse.ArgumentParser(add_help=False)
+    common.add_argument("--sheet", help="Spreadsheet ID (lấy trong URL)")
+    common.add_argument("--key", help="Đường dẫn file key service account")
+    common.add_argument("--url", help="URL /exec của Apps Script")
+
+    p = argparse.ArgumentParser(description="Quản lý spreadsheet VJ-POS", parents=[common])
     sub = p.add_subparsers(dest="cmd", required=True)
 
-    sub.add_parser("setup", help="Tạo sheet còn thiếu kèm header")
-    sub.add_parser("seed", help="Nạp dữ liệu mồi vào sheet trống")
-    sub.add_parser("verify", help="Đối chiếu sheet với 98_setup.gs")
-    sub.add_parser("health", help="Kiểm tra API đã deploy")
-    sub.add_parser("set-api", help="Ghi URL API vào config.js")
+    sub.add_parser("setup", help="Tạo sheet còn thiếu kèm header", parents=[common])
+    sub.add_parser("seed", help="Nạp dữ liệu mồi vào sheet trống", parents=[common])
+    sub.add_parser("verify", help="Đối chiếu sheet với 98_setup.gs", parents=[common])
+    sub.add_parser("health", help="Kiểm tra API đã deploy", parents=[common])
+    sub.add_parser("set-api", help="Ghi URL API vào config.js", parents=[common])
 
-    o = sub.add_parser("orders", help="Xem đơn gần nhất")
+    o = sub.add_parser("orders", help="Xem đơn gần nhất", parents=[common])
     o.add_argument("--pos", action="store_true", help="Đơn POS thay vì đơn web")
     o.add_argument("--shop", action="store_true", help="Đơn web (mặc định)")
     o.add_argument("--limit", type=int, default=15)

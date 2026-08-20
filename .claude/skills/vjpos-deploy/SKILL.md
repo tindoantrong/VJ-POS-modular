@@ -77,6 +77,26 @@ Apps Script chạy code top-level theo thứ tự file, mà `00_schema.gs` khai 
 
 `check` đã tự dịch sẵn những lỗi này kèm cách xử lý.
 
+## ⚠️ Bẫy: deploy lần đầu bằng clasp sẽ trả 403
+
+Lần deploy ĐẦU TIÊN của một script mới, dù `appsscript.json` đã khai
+`"access": "ANYONE_ANONYMOUS"`, gọi URL `/exec` vẫn nhận **403 "Truy cập bị từ chối"**.
+
+Lý do: script chưa bao giờ được cấp quyền OAuth — chủ script chưa chạy hàm nào trong
+editor, nên Google chưa có gì để `Execute as: Me` chạy dưới danh nghĩa. clasp không kích
+hoạt được luồng cấp quyền đó vì nó cần người bấm Allow trên trình duyệt.
+
+**Cách gỡ (chỉ làm một lần cho mỗi script):**
+
+1. Mở editor: `clasp open-script` hoặc vào script.google.com
+2. Chọn hàm `testSchema` → **Run** → màn cảnh báo "Google hasn't verified this app"
+   → Advanced → Go to ... (unsafe) → **Allow**
+3. **Deploy → Manage deployments → biểu tượng bút chì → Who has access: Anyone → Deploy**
+
+Bước 3 **giữ nguyên URL** vì đang sửa deployment sẵn có, nên `config.js` không cần đổi.
+
+Từ lần sau `python $D ship` chạy trọn vẹn, không cần đụng UI nữa.
+
 ## Sau khi deploy phải kiểm tra
 
 ```bash
