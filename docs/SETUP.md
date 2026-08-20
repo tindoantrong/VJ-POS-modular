@@ -178,5 +178,5 @@ tại. Nếu cần siết:
 | `Missing sheet: Admin_Products` | Chưa chạy `setupNewSpreadsheet` |
 | `Invalid PIN` dù gõ đúng | Cột `active` đang FALSE, hoặc PIN trong sheet lưu dạng số bị mất số 0 đầu — format cột `pin` thành **Plain text** |
 | App hiện tên sản phẩm sai | Sai cột — chạy `?action=schema` xem `detectedHeaders` |
-| Sửa code rồi mà app không đổi | Chưa "New version" khi deploy, hoặc chưa bump `?v=` trong index.html |
+| Sửa code rồi mà app không đổi | Chưa "New version" khi deploy, hoặc chưa bump `?v=` trong index.html / pos.html |
 | Đơn ghi được nhưng kho không trừ | Sản phẩm có `loai_hang` nằm trong danh sách dịch vụ (`SERVICE_TYPES`) |

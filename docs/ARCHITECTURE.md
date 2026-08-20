@@ -5,7 +5,7 @@
 ```
 iPhone Safari (GitHub Pages)          Google Cloud
 ┌──────────────────────────┐         ┌─────────────────────────┐
-│ index.html               │  fetch  │ Apps Script Web App     │
+│ index.html (shop)        │  fetch  │ Apps Script Web App     │
 │  └ assets/css/*.css      │ ──────▶ │  doGet  → đọc           │
 │  └ assets/js/**/*.js     │ ◀────── │  doPost → ghi (cần PIN) │
 └──────────────────────────┘  JSON   └───────────┬─────────────┘
@@ -32,7 +32,7 @@ component viết bằng `React.createElement` (không JSX).
 
 Tất cả gắn vào namespace `window.VJ`. Không dùng ES module để mở bằng `file://` vẫn chạy.
 
-**Thứ tự nạp script trong `index.html` là bắt buộc:**
+**Thứ tự nạp script trong `pos.html` là bắt buộc:**
 `config → lib → api → domain → ui → screens → app`. Đảo thứ tự sẽ trắng màn hình.
 
 ## Nơi đặt các thứ hay phải sửa
@@ -63,7 +63,7 @@ Tất cả gắn vào namespace `window.VJ`. Không dùng ES module để mở b
 ## Deploy
 
 **Frontend:** commit lên `main` → GitHub Pages tự deploy (1–2 phút).
-Nhớ bump `BUILD_VERSION` trong `config.js` VÀ tất cả `?v=` trong `index.html` (Find & Replace),
+Nhớ bump `BUILD_VERSION` trong `config.js` VÀ tất cả `?v=` trong `index.html` + `pos.html` (Find & Replace),
 nếu không iPhone sẽ dùng file cũ trong cache.
 
 **Backend:** xem [backend/README.md](../backend/README.md).

@@ -20,7 +20,7 @@ function doGet(e) {
       case "staff": return getStaffPublic();
       case "artists": return getArtists();
       case "orders": return getOrders();
-      // PUBLIC — bảng giá cho trang bán hàng khách lẻ (shop.html). Không cần PIN vì
+      // PUBLIC — bảng giá cho trang bán hàng khách lẻ (index.html). Không cần PIN vì
       // giá bán vốn là thông tin công khai, in trên bao bì.
       case "shop_products": return getShopProducts();
       // Giữ lại để tương thích ngược. Frontend mới đăng nhập bằng POST (PIN không lọt vào URL).

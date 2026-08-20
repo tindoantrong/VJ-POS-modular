@@ -5,7 +5,7 @@
         Muốn dùng spreadsheet của riêng mình: làm theo docs/SETUP.md rồi dán URL mới vào đây.
         ⚠️ URL này trình duyệt tải về được nên coi như công khai — xem mục bảo mật ở SETUP.md.
 
-   BUILD_VERSION: mỗi lần deploy nhớ bump, và sửa luôn ?v= trong index.html để iPhone không dùng cache cũ. */
+   BUILD_VERSION: mỗi lần deploy nhớ bump, và sửa luôn ?v= trong index.html và pos.html để iPhone không dùng cache cũ. */
 window.VJ = window.VJ || {};
 
 VJ.config = {

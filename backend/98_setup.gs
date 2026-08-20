@@ -53,7 +53,7 @@ const SHEET_TEMPLATES = {
     "qty_change", "qty_before", "qty_after", "reference", "changed_by"
   ],
 
-  /* ── Đơn từ trang bán hàng khách lẻ (shop.html) ──
+  /* ── Đơn từ trang bán hàng khách lẻ (index.html) ──
      Tách hẳn khỏi Orders của POS: đây mới là đơn CHỜ XÁC NHẬN, chưa trừ kho,
      chưa tính hoa hồng. Nhân viên gọi xác nhận rồi mới lên đơn POS thật. */
   Shop_Orders: [

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#08090C">
+<title>VJ·POS — Bán hàng tại quầy</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💎</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     TRANG NÀY DÀNH CHO NHÂN VIÊN, cần PIN. Trang chủ (index.html) là trang bán
+     hàng công khai cho khách — đừng đặt link tới đây trên trang chủ.
+
+     CACHE BUSTING — iPhone Safari giữ file cũ rất lâu.
+     Mỗi lần deploy: sửa ?v=... ở TẤT CẢ dòng bên dưới cho khớp
+     VJ.config.BUILD_VERSION trong assets/js/config.js (dùng Find & Replace).
+     ═══════════════════════════════════════════════════════════════════════ -->
+<link rel="stylesheet" href="assets/css/tokens.css?v=2026-02-24-modular">
+<link rel="stylesheet" href="assets/css/layout.css?v=2026-02-24-modular">
+<link rel="stylesheet" href="assets/css/components.css?v=2026-02-24-modular">
+<link rel="stylesheet" href="assets/css/screens.css?v=2026-02-24-modular">
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+
+<!-- THỨ TỰ NẠP QUAN TRỌNG: config → lib → api → domain → ui → screens → app.
+     File sau dùng biến của file trước qua namespace window.VJ. Đảo thứ tự là app trắng màn. -->
+<script src="assets/js/config.js?v=2026-02-24-modular"></script>
+
+<script src="assets/js/lib/format.js?v=2026-02-24-modular"></script>
+<script src="assets/js/lib/catalog.js?v=2026-02-24-modular"></script>
+
+<script src="assets/js/api/client.js?v=2026-02-24-modular"></script>
+
+<script src="assets/js/domain/totals.js?v=2026-02-24-modular"></script>
+<script src="assets/js/domain/drafts.js?v=2026-02-24-modular"></script>
+
+<script src="assets/js/ui/DiscountInput.js?v=2026-02-24-modular"></script>
+<script src="assets/js/ui/CartItem.js?v=2026-02-24-modular"></script>
+<script src="assets/js/ui/PaymentModal.js?v=2026-02-24-modular"></script>
+<script src="assets/js/ui/ErrorBoundary.js?v=2026-02-24-modular"></script>
+
+<script src="assets/js/screens/Login.js?v=2026-02-24-modular"></script>
+<script src="assets/js/screens/Products.js?v=2026-02-24-modular"></script>
+<script src="assets/js/screens/Order.js?v=2026-02-24-modular"></script>
+<script src="assets/js/screens/Orders.js?v=2026-02-24-modular"></script>
+<script src="assets/js/screens/Admin.js?v=2026-02-24-modular"></script>
+
+<script src="assets/js/app.js?v=2026-02-24-modular"></script>
+</body>
+</html>

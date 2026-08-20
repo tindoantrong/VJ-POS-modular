@@ -1,6 +1,6 @@
 // ═══════════════════════════════════════════════════════════
 // VJ-POS Apps Script — 80_shop.gs
-// Trang bán gạo cho khách lẻ (shop.html). Endpoint PUBLIC, KHÔNG cần PIN.
+// Trang bán gạo cho khách lẻ (index.html). Endpoint PUBLIC, KHÔNG cần PIN.
 //
 // KHÁC BIỆT QUAN TRỌNG so với POS:
 // - Đơn khách đặt ghi vào Shop_Orders, KHÔNG ghi vào Orders của POS.

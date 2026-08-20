@@ -18,7 +18,8 @@ backend là Google Apps Script, database là Google Sheets.
 ## Cấu trúc thư mục
 
 ```
-index.html                 ← khung HTML + danh sách script (không chứa logic)
+index.html                 ← TRANG CHỦ: trang bán gạo công khai, KHÔNG cần đăng nhập
+pos.html                   ← POS cho nhân viên trong tiệm, đăng nhập bằng PIN
 assets/css/
   tokens.css               ← màu, bo góc, font
   layout.css               ← khung .app/.top/.main/.tabs  (dễ vỡ nhất)
@@ -41,8 +42,18 @@ docs/
   TODO.md                  ← bug và tính năng đang chờ
 ```
 
+## Hai trang, hai đối tượng
+
+| Đường dẫn | Ai dùng | Đăng nhập |
+|---|---|---|
+| `/` (index.html) | **Khách mua gạo** — xem hàng, đặt online | Không |
+| `/pos.html` | **Nhân viên** — bán tại quầy, thu tiền, huỷ đơn | PIN 4 số |
+
+Khách vào link gốc là thấy ngay trang bán hàng. Trang POS cố ý **không có link nào trỏ tới**
+từ trang chủ — nhân viên tự lưu bookmark.
+
 **Muốn chạy trên spreadsheet của riêng bạn?** Làm theo [docs/SETUP.md](docs/SETUP.md) —
-có script tự dựng cả 7 sheet, khỏi gõ tay.
+có script tự dựng cả 9 sheet, khỏi gõ tay.
 
 Bắt đầu đọc code từ [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
@@ -79,7 +90,7 @@ Deploy frontend: commit lên `main`, GitHub Pages tự build 1–2 phút.
 
 > ⚠️ **Mỗi lần deploy phải bump version cache-busting**, nếu không iPhone dùng file cũ:
 > sửa `BUILD_VERSION` trong [assets/js/config.js](assets/js/config.js) và Find & Replace
-> toàn bộ `?v=...` trong [index.html](index.html) cho khớp.
+> toàn bộ `?v=...` trong [index.html](index.html) và [pos.html](pos.html) cho khớp.
 
 Deploy backend: xem [backend/README.md](backend/README.md).
 

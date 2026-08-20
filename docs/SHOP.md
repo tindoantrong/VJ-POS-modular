@@ -1,11 +1,11 @@
-# Trang bán gạo cho khách lẻ (shop.html)
+# Trang bán gạo cho khách lẻ (index.html — TRANG CHỦ)
 
 Trang công khai, khách tự vào đặt hàng, **không cần đăng nhập, không cần PIN**.
 Chạy song song với POS trên cùng backend, cùng spreadsheet.
 
 ```
-index.html  → POS trong tiệm, nhân viên đăng nhập bằng PIN   → sheet Orders
-shop.html   → khách lẻ đặt online, không cần đăng nhập        → sheet Shop_Orders
+index.html  → TRANG CHỦ, khách lẻ đặt online, KHÔNG cần đăng nhập → sheet Shop_Orders
+pos.html    → POS trong tiệm, nhân viên đăng nhập bằng PIN       → sheet Orders
 ```
 
 ## Vì sao tách sheet riêng
@@ -51,7 +51,7 @@ Phí ship và ngưỡng miễn phí cũng nằm trong `80_shop.gs`
 ## Đổi nội dung trình bày
 
 `assets/js/shop/products.js` — tên, slogan, mô tả, điểm nổi bật, nhãn "Bán chạy nhất",
-thông tin liên hệ (hotline, email, địa chỉ). Sửa xong nhớ bump `?v=` trong `shop.html`.
+thông tin liên hệ (hotline, email, địa chỉ). Sửa xong nhớ bump `?v=` trong `index.html`.
 
 ## Ảnh sản phẩm
 
@@ -61,7 +61,7 @@ thẻ sản phẩm tự hiện khối thay thế thay vì vỡ layout.
 ## Cấu trúc file
 
 ```
-shop.html                      trang bán hàng (tách hẳn khỏi index.html của POS)
+index.html                     TRANG CHỦ — trang bán hàng (tách hẳn khỏi pos.html của POS)
 assets/css/shop.css            bộ CSS riêng, sáng — KHÔNG dùng chung CSS tối của POS
 assets/js/shop/
   products.js                  nội dung trình bày + giá dự phòng

@@ -143,7 +143,7 @@ python $S health
 ## Sửa frontend
 
 Commit lên `main` → GitHub Pages tự deploy. **Nhớ bump `?v=`** trong `index.html` và
-`shop.html` cho khớp `BUILD_VERSION`, không thì iPhone dùng bản cache cũ.
+`pos.html` cho khớp `BUILD_VERSION`, không thì iPhone dùng bản cache cũ.
 
 ## Đổi giá gạo
 
