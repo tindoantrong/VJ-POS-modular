@@ -68,9 +68,31 @@ const SHEET_TEMPLATES = {
   ],
 };
 
+/* Cột BẮT BUỘC định dạng chữ (@), không được để Sheets tự hiểu là số.
+   Số điện thoại "0912345678" lưu dạng số sẽ mất số 0 đầu → nhân viên gọi sai số.
+   PIN "0123" mất số 0 đầu → nhân viên không đăng nhập được, mà nhìn sheet vẫn thấy "đúng". */
+const TEXT_COLUMNS = {
+  Admin_Staff: ["pin"],
+  Orders: ["customer_phone"],
+  Shop_Orders: ["customer_phone"],
+};
+
+/* Ép định dạng chữ cho các cột nhạy cảm. Chạy được trên cả sheet mới lẫn sheet cũ,
+   chỉ đổi định dạng chứ không đụng dữ liệu. */
+function _forceTextColumns_(ws, sheetName) {
+  const cols = TEXT_COLUMNS[sheetName];
+  if (!cols) return;
+  const h = _hmap_(ws);
+  for (const name of cols) {
+    const c = _col_(h, [name]);
+    if (c >= 0) ws.getRange(1, c + 1, ws.getMaxRows(), 1).setNumberFormat("@");
+  }
+}
+
 /* ═══ CHẠY HÀM NÀY ĐẦU TIÊN ═══
    Tạo các sheet còn thiếu kèm dòng header, đóng băng dòng 1, in đậm header.
-   KHÔNG xoá, KHÔNG sửa sheet đã có sẵn. */
+   KHÔNG xoá, KHÔNG sửa dữ liệu sheet đã có sẵn.
+   Chạy lại trên spreadsheet cũ vẫn có ích: nó sửa định dạng cột điện thoại / PIN. */
 function setupNewSpreadsheet() {
   const created = [];
   const skipped = [];
@@ -79,6 +101,7 @@ function setupNewSpreadsheet() {
     let ws = SS.getSheetByName(name);
 
     if (ws) {
+      _forceTextColumns_(ws, name);   // sửa định dạng cho cả sheet cũ, không đụng dữ liệu
       skipped.push(name + " (đã có, giữ nguyên)");
       continue;
     }
@@ -92,6 +115,7 @@ function setupNewSpreadsheet() {
       .setBackground("#10121A")
       .setFontColor("#B0C4D8");
     ws.setFrozenRows(1);
+    _forceTextColumns_(ws, name);
 
     // Cắt bớt cột thừa cho sheet gọn, giữ dư 2 cột để sau này thêm
     const keep = headers.length + 2;

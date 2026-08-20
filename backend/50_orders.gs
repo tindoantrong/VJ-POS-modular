@@ -215,7 +215,7 @@ function submitOrder(body) {
       order_date: now,
       staff_id: body.staffId || "",
       customer_name: body.customerName || "",
-      customer_phone: body.customerPhone || "",
+      customer_phone: _asText_(body.customerPhone || ""),   // giữ số 0 đầu
       base_cost_total: baseCostTotal,
       discount_total: discountTotal,              // = giảm giá dòng + giảm giá bill (gộp)
       bill_disc_amt: _asNum_(body.billDiscAmt, 0),   // riêng phần giảm giá bill

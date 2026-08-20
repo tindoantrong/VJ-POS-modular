@@ -34,7 +34,8 @@ assets/js/
   app.js                   ← state + nối dây
 backend/                   ← Apps Script, 10 file .gs (xem backend/README.md)
 docs/
-  SETUP.md                 ← dựng spreadsheet + backend của riêng bạn từ số 0
+  RUNBOOK.md               ← ⭐ dựng lại từ số 0 + 6 cạm bẫy đã gặp, đọc cái này trước
+  SETUP.md                 ← hướng dẫn chi tiết từng bước (bản làm tay)
   ARCHITECTURE.md          ← quy ước code, sửa gì ở đâu
   SHEETS.md                ← cấu trúc Google Sheets
   TODO.md                  ← bug và tính năng đang chờ

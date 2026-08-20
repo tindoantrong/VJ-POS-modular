@@ -34,14 +34,15 @@ DEFAULT_KEY = "F:/wampp/www/nbk2020_8/user_config/sheets-writer-key.json"
 # ══════════════════════════════════════════════════════════════
 # Đọc SHEET_TEMPLATES từ file .gs — nguồn sự thật duy nhất về cột
 # ══════════════════════════════════════════════════════════════
-def load_templates():
+def _load_gs_object(name):
+    """Bóc một object literal từ 98_setup.gs ra dict Python."""
     if not os.path.exists(SETUP_GS):
         die("Không tìm thấy %s" % SETUP_GS)
     src = open(SETUP_GS, encoding="utf-8").read()
 
-    i = src.find("const SHEET_TEMPLATES")
+    i = src.find("const " + name)
     if i < 0:
-        die("Không thấy khai báo SHEET_TEMPLATES trong 98_setup.gs")
+        die("Không thấy khai báo %s trong 98_setup.gs" % name)
     i = src.index("{", i)
     j = src.index("\n};", i)
     body = src[i:j + 2]
@@ -54,7 +55,15 @@ def load_templates():
     try:
         return json.loads(body)
     except json.JSONDecodeError as e:
-        die("Không đọc được SHEET_TEMPLATES: %s" % e)
+        die("Không đọc được %s: %s" % (name, e))
+
+
+def load_templates():
+    return _load_gs_object("SHEET_TEMPLATES")
+
+
+def load_text_columns():
+    return _load_gs_object("TEXT_COLUMNS")
 
 
 # Dữ liệu mồi. PHẢI KHỚP seedStarterData() trong backend/98_setup.gs.
@@ -80,6 +89,14 @@ SEED = {
          "brand_id": "SV", "gia_ban": 500000, "gia_von": 100000, "qty_on_hand": 0, "image_url": "", "active": True},
     ],
 }
+
+
+def _int(v):
+    """Ép về số nguyên an toàn khi đọc bằng numericise_ignore (mọi ô đều là chuỗi)."""
+    try:
+        return int(float(str(v).replace(",", "").strip() or 0))
+    except ValueError:
+        return 0
 
 
 def die(msg):
@@ -124,14 +141,34 @@ def open_sheet(args):
 
 
 # ══════════════════════════════════════════════════════════════
+def _force_text_columns(ws, headers, cols):
+    """Ép cột nhạy cảm thành định dạng chữ. Chỉ đổi định dạng, không đụng dữ liệu.
+    Số điện thoại '0912345678' để Sheets tự hiểu sẽ thành số và mất số 0 đầu —
+    nhân viên gọi sai số. PIN '0123' thành '123' thì không đăng nhập được."""
+    import gspread.utils as gu
+    hmap = {norm(h): i for i, h in enumerate(headers)}
+    for name in cols:
+        i = hmap.get(norm(name))
+        if i is None:
+            continue
+        letter = gu.rowcol_to_a1(1, i + 1).rstrip("1")
+        ws.format("%s:%s" % (letter, letter), {"numberFormat": {"type": "TEXT"}})
+
+
 def cmd_setup(args):
     sh = open_sheet(args)
     templates = load_templates()
+    text_cols = load_text_columns()
     existing = {w.title: w for w in sh.worksheets()}
 
-    created, skipped = [], []
+    created, skipped, fixed = [], [], []
     for name, headers in templates.items():
         if name in existing:
+            # Sheet cũ vẫn chạy qua bước ép định dạng — sửa được spreadsheet dựng trước đây
+            if name in text_cols:
+                ws = existing[name]
+                _force_text_columns(ws, ws.row_values(1), text_cols[name])
+                fixed.append("%s: %s" % (name, ", ".join(text_cols[name])))
             skipped.append(name)
             continue
 
@@ -142,6 +179,8 @@ def cmd_setup(args):
             "textFormat": {"bold": True, "foregroundColor": {"red": .69, "green": .77, "blue": .85}},
             "backgroundColor": {"red": .06, "green": .07, "blue": .10},
         })
+        if name in text_cols:
+            _force_text_columns(ws, headers, text_cols[name])
         created.append("%s (%d cột)" % (name, len(headers)))
 
     # Xoá Sheet1 mặc định nếu còn trống và đã có sheet khác
@@ -160,6 +199,10 @@ def cmd_setup(args):
             print("  = " + s)
     if not created:
         print("  (không có gì để tạo)")
+    if fixed:
+        print("ĐÃ ÉP ĐỊNH DẠNG CHỮ (chống mất số 0 đầu):")
+        for f in fixed:
+            print("  ~ " + f)
     print("\nBước tiếp: seed rồi verify")
 
 
@@ -242,7 +285,7 @@ def cmd_verify(args):
         sys.exit(1)
 
     try:
-        staff = sh.worksheet("Admin_Staff").get_all_records()
+        staff = sh.worksheet("Admin_Staff").get_all_records(numericise_ignore=["all"])
         active = [s for s in staff if str(s.get("active", "")).upper() not in ("FALSE", "0", "")]
         if not active:
             print("CẢNH BÁO: chưa có nhân viên nào active → không ai đăng nhập được POS")
@@ -263,7 +306,10 @@ def cmd_orders(args):
     except Exception:
         die("Chưa có sheet %s" % name)
 
-    rows = ws.get_all_records()
+    # numericise_ignore=["all"]: BẮT BUỘC. Mặc định gspread đổi chuỗi trông giống số
+    # thành số nguyên, nên "0338111222" hiện ra thành 338111222 — dữ liệu trong sheet
+    # vẫn đúng, chỉ là công cụ xem in sai, rất dễ tưởng nhầm backend hỏng.
+    rows = ws.get_all_records(numericise_ignore=["all"])
     if not rows:
         print("Chưa có đơn nào trong %s." % name)
         return
@@ -276,14 +322,14 @@ def cmd_orders(args):
             print("  %-10s %-19s %-18s %12s  %s" % (
                 r.get("order_id", ""), str(r.get("order_date", ""))[:19],
                 str(r.get("customer_name", ""))[:18],
-                "{:,}d".format(int(r.get("grand_total") or 0)),
+                "{:,}d".format(_int(r.get("grand_total"))),
                 r.get("status", "")))
     else:
         for r in rows:
             print("  %-9s %-19s %-16s %-12s %11s  %s" % (
                 r.get("shop_order_id", ""), str(r.get("created_at", ""))[:19],
                 str(r.get("customer_name", ""))[:16], r.get("customer_phone", ""),
-                "{:,}d".format(int(r.get("grand_total") or 0)),
+                "{:,}d".format(_int(r.get("grand_total"))),
                 r.get("status", "")))
         new = [r for r in rows if str(r.get("status", "")).upper() == "NEW"]
         if new:

@@ -72,6 +72,17 @@ function _findRowByHeader_(ws, headerVariants, value) {
   return -1;
 }
 
+/* Ép một giá trị được lưu DẠNG CHỮ trong Sheets.
+   Đặt định dạng cột thành "@" là KHÔNG đủ: định dạng chỉ đổi cách hiển thị, còn lúc ghi
+   thì Sheets vẫn ép chuỗi "0987654321" thành số 987654321 — số 0 đầu mất khỏi chính giá
+   trị lưu xuống, format cỡ nào cũng không dựng lại được.
+   Dấu nháy đơn đầu chuỗi là ký hiệu "bắt buộc là chữ" của Sheets, và KHÔNG nằm trong giá
+   trị khi đọc lại bằng getValue(). Dùng cho số điện thoại và PIN. */
+function _asText_(v) {
+  const s = String(v == null ? "" : v);
+  return s === "" ? "" : "'" + s;
+}
+
 function _fmtDate_(d) {
   if (!d) return "";
   if (d instanceof Date) return Utilities.formatDate(d, TZ, "yyyy-MM-dd HH:mm:ss");

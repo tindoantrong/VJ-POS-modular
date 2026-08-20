@@ -144,7 +144,7 @@ function submitCustomerOrder(body) {
       shop_order_id: orderId,
       created_at: now,
       customer_name: name,
-      customer_phone: phone,
+      customer_phone: _asText_(phone),   // giữ số 0 đầu, xem _asText_ trong 20_sheets.gs
       customer_address: address,
       note: note,
       payment_method: payment,
