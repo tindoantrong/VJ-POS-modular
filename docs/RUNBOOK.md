@@ -156,6 +156,38 @@ Phải thêm vào `filePushOrder` trong `.clasp.json`, không thì thứ tự n�
 
 ---
 
+# Test trước khi deploy
+
+```bash
+python tests/live_api_test.py          # 48 ca, chạy trên API + sheet THẬT
+python tests/live_api_cleanup.py       # xem trước sẽ dọn gì
+python tests/live_api_cleanup.py --yes # dọn thật, đưa sheet về trạng thái sau seed
+```
+
+⚠️ Test **ghi dữ liệu thật** (đơn hàng, tồn kho, nhật ký kho). Chỉ chạy trên spreadsheet
+dùng để thử, đừng chạy trên sheet đang bán hàng.
+
+Sáu nhóm ca:
+
+| Nhóm | Nội dung |
+|---|---|
+| A | Chống gian lận endpoint public: bịa giá, sản phẩm lạ, vượt trần, honeypot, chặn tần suất, mốc miễn ship |
+| B | Đăng nhập POS, PIN sai, không lộ PIN và giá vốn ra API |
+| C | Vòng đời đơn: bán → trừ kho → thu tiền từng phần → PAID → huỷ → hoàn kho |
+| D | Bán quá tồn kho, dịch vụ, hàng đặt riêng, phân quyền staff/manager |
+| E | Nhập kho hàng loạt, hàng mới hiện đúng tên |
+| F | ping, schema, action lạ, PIN sai không ghi được |
+
+Kết quả lần chạy 2026-08-20: **48/48 PASS**.
+
+Ngoài ra đã kiểm tay trên trình duyệt với backend thật:
+
+- Trang shop: đặt hàng đủ luồng, số tiền trên màn hình khớp số server trả về
+- POS: đăng nhập PIN → nạp danh mục → bán 2 món, giảm giá bill 10%, phí thẻ 3%
+  → đối chiếu **11 chỉ số** giữa màn hình và sheet, khớp từng đồng kể cả hoa hồng 76.500đ
+
+---
+
 # Trạng thái lần dựng 2026-08-20
 
 ```
