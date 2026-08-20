@@ -115,25 +115,65 @@ def cmd_check(args):
         say("  OK      .clasp.json → script %s" % cj.get("scriptId", "?")[:20] + "...")
         say("          thư mục nguồn: %s" % cj.get("rootDir", "?"))
 
-    # Thử một lệnh cần quyền thật để biết token còn sống không
     if cj:
+        # Bước 1: token còn sống không
         code, out = run(["clasp", "list-deployments"], timeout=120)
         if code == 0:
-            n = len([l for l in out.splitlines() if "-" in l and "Deployment" not in l])
-            say("  OK      đăng nhập còn hiệu lực (%d deployment)" % max(0, n))
+            m = re.search(r"Found (\d+) deployment", out)
+            say("  OK      đăng nhập còn hiệu lực (%s deployment)" % (m.group(1) if m else "?"))
         else:
             say("  HỎNG    không gọi được API Apps Script")
-            hint = explain(out)
             say("          %s" % (out.splitlines()[0] if out else "")[:100])
+            hint = explain(out)
             if hint:
                 say()
                 for line in hint.splitlines():
                     say("          " + line)
-            ok = False
+            say()
+            say("CHƯA SẴN SÀNG — xử lý mục HỎNG/THIẾU ở trên")
+            sys.exit(1)
+
+        # Bước 2: đọc được NỘI DUNG project không.
+        # list-deployments đi đường khác nên vẫn chạy dù Apps Script API đang tắt —
+        # từng làm check báo SẴN SÀNG rồi push chết ngay. Phải thử đúng nhánh
+        # projects.getContent, cùng nhánh với updateContent mà push dùng.
+        # Pull vào THƯ MỤC TẠM, tuyệt đối không pull đè lên backend/.
+        import tempfile, shutil
+        tmp = tempfile.mkdtemp(prefix="vjpos_check_")
+        try:
+            json.dump({"scriptId": cj.get("scriptId"), "rootDir": "."},
+                      open(os.path.join(tmp, ".clasp.json"), "w", encoding="utf-8"))
+            code, out = run(["clasp", "pull"], timeout=150, cwd=tmp)
+            if code == 0:
+                n = len([f for f in os.listdir(tmp) if not f.startswith(".clasp")])
+                say("  OK      đọc được nội dung project (%d file đang ở trên đó)" % n)
+                say("  ?       quyền GHI chưa kiểm được — xem ghi chú bên dưới")
+            else:
+                say("  HỎNG    không đọc được nội dung project → push sẽ thất bại")
+                say("          %s" % (out.splitlines()[0] if out else "")[:110])
+                hint = explain(out)
+                if hint:
+                    say()
+                    for line in hint.splitlines():
+                        say("          " + line)
+                ok = False
+        finally:
+            shutil.rmtree(tmp, ignore_errors=True)
 
     say()
-    say("SẴN SÀNG ĐẨY CODE" if ok else "CHƯA SẴN SÀNG — xử lý mục HỎNG/THIẾU ở trên")
-    sys.exit(0 if ok else 1)
+    if not ok:
+        say("CHƯA SẴN SÀNG — xử lý mục HỎNG/THIẾU ở trên")
+        sys.exit(1)
+
+    # Không khẳng định chắc chắn push sẽ chạy. Đọc và ghi là hai nhánh quyền khác nhau:
+    # đã gặp trường hợp `clasp pull` chạy ngon lành nhưng `clasp push` vẫn báo
+    # "User has not enabled the Apps Script API". Chỉ chính lệnh push mới xác nhận được.
+    say("ĐỌC ĐƯỢC PROJECT. Giờ thử push.")
+    say()
+    say("Nếu push báo \"has not enabled the Apps Script API\" thì bật công tắc ở:")
+    say("  https://script.google.com/home/usersettings")
+    say("Đọc được không có nghĩa là ghi được — hai nhánh quyền tách nhau.")
+    sys.exit(0)
 
 
 def cmd_init(args):
