@@ -205,6 +205,11 @@ function submitOrder(body) {
     const extraFeeTotal = _asNum_(body.cardFeeAmt, 0) + _asNum_(body.shipAmt, 0);
     const grandTotal = _asNum_(body.grandTotal, 0);
 
+    /* _appendByHeader_ bỏ qua key nào không có cột tương ứng, nên ghi dư key là an toàn:
+       sheet cũ thiếu cột bill_disc_amt/card_fee_amt/ship_amt/notes thì không sao,
+       sheet mới (dựng bằng 98_setup.gs) sẽ lưu được đầy đủ chi tiết.
+       Trước đây chỉ ghi discount_total và extra_fee_total gộp, nên mở lại đơn cũ
+       không biết được bao nhiêu là giảm giá bill, bao nhiêu là phí thẻ / phí ship. */
     _appendByHeader_(wsO, {
       order_id: orderId,
       order_date: now,
@@ -212,10 +217,15 @@ function submitOrder(body) {
       customer_name: body.customerName || "",
       customer_phone: body.customerPhone || "",
       base_cost_total: baseCostTotal,
-      discount_total: discountTotal,
+      discount_total: discountTotal,              // = giảm giá dòng + giảm giá bill (gộp)
+      bill_disc_amt: _asNum_(body.billDiscAmt, 0),   // riêng phần giảm giá bill
+      bill_disc_pct: _asNum_(body.billDiscPct, 0),
       net_commission_base: netCommBase,
-      extra_fee_total: extraFeeTotal,
+      card_fee_amt: _asNum_(body.cardFeeAmt, 0),
+      ship_amt: _asNum_(body.shipAmt, 0),
+      extra_fee_total: extraFeeTotal,             // = phí thẻ + phí ship (gộp)
       grand_total: grandTotal,
+      notes: body.notes || "",
       collected_total: 0,
       collected_for_commission: 0,
       payment_status: "UNPAID",

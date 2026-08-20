@@ -1,5 +1,8 @@
 # VJ·POS — Cấu trúc Google Sheets
 
+> Dựng spreadsheet mới từ đầu? Đừng gõ tay các cột dưới đây — chạy `setupNewSpreadsheet()`
+> theo [SETUP.md](SETUP.md), nó tạo sẵn đúng hết. Trang này để tra cứu ý nghĩa từng cột.
+
 Backend đọc/ghi **theo tên cột**, không theo vị trí cột. Nghĩa là:
 
 - Chèn thêm cột, đổi chỗ cột → **an toàn**.
@@ -68,14 +71,34 @@ Mỗi brand một tỉ lệ hoa hồng trả cho nhân viên.
 `rate` là số thập phân: `0.05` = 5%.
 
 ### Orders
-Một dòng một đơn. `status = VOID` là đơn đã huỷ (không xoá dòng).
+Một dòng một đơn. `status = VOID` là đơn đã huỷ (không xoá dòng, để còn đối chiếu).
 
-`order_id`, `order_date`, `staff_id`, `customer_name`, `customer_phone`,
-`base_cost_total` (= subtotal), `discount_total`, `net_commission_base`,
-`extra_fee_total`, `grand_total`, `collected_total`, `collected_for_commission`,
-`payment_status`, `commission_paid_total`, `status`.
+| Cột | Ý nghĩa |
+|---|---|
+| `order_id` | `VJ-0001`, `VJ-0002`… sinh tự động |
+| `order_date` | `yyyy-MM-dd HH:mm:ss` giờ Việt Nam |
+| `staff_id` | Nhân viên bán, lấy từ PIN đã xác thực (không tin client gửi) |
+| `customer_name` / `customer_phone` | |
+| `base_cost_total` | Tổng tiền hàng trước mọi giảm giá (= subtotal) |
+| `discount_total` | **Giảm giá dòng + giảm giá bill, GỘP LẠI** |
+| `bill_disc_amt` / `bill_disc_pct` | Riêng phần giảm giá bill |
+| `net_commission_base` | Gốc tính hoa hồng = sau giảm giá, **trước** phí thẻ và ship |
+| `card_fee_amt` / `ship_amt` | Phí thẻ 3% và phí ship, tách riêng |
+| `extra_fee_total` | Phí thẻ + ship, GỘP LẠI |
+| `grand_total` | Số khách phải trả |
+| `notes` | Ghi chú đơn |
+| `collected_total` | Đã thu bao nhiêu, backend tự cộng dồn mỗi lần ghi thanh toán |
+| `collected_for_commission` | Phần đã thu được tính hoa hồng |
+| `payment_status` | Backend tự tính: `PAID` / `PARTIAL` / `UNPAID` |
+| `commission_paid_total` | Đã chi hoa hồng bao nhiêu cho đơn này |
+| `status` | `ACTIVE` / `VOID` |
 
-`payment_status` do backend tự tính khi ghi thanh toán: `PAID` / `PARTIAL` / `UNPAID`.
+> `discount_total` và `extra_fee_total` là số **gộp**, còn `bill_disc_amt`, `card_fee_amt`,
+> `ship_amt` là số **tách**. Làm báo cáo nhớ đừng cộng cả hai loại, sẽ tính hai lần.
+>
+> Sheet dựng trước tháng 2/2026 có thể thiếu 5 cột tách (`bill_disc_amt`, `bill_disc_pct`,
+> `card_fee_amt`, `ship_amt`, `notes`) — khi đó backend vẫn chạy bình thường, chỉ là bỏ qua
+> không ghi. Thêm cột vào là tự động có dữ liệu từ đơn mới.
 
 ### Order_Items
 Một dòng một sản phẩm trong đơn. `order_item_id` = `<order_id>-01`, `-02`…

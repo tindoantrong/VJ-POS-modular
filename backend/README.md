@@ -15,6 +15,7 @@ bản đang chạy thật nằm trong Apps Script editor. Hai bên phải khớp
 | `50_orders.gs` | `orders`, `submit_order`, `void_order`, sinh mã đơn |
 | `60_payments.gs` | `add_payment` |
 | `70_stock.gs` | Trừ kho, chỉnh kho, nhập kho hàng loạt, ghi log |
+| `98_setup.gs` | Dựng 7 sheet cho spreadsheet trống — xem [docs/SETUP.md](../docs/SETUP.md) |
 | `99_debug.gs` | Hàm chạy tay để chẩn đoán |
 
 Apps Script chạy code top-level theo thứ tự file trong editor. Tiền tố số giữ đúng thứ tự

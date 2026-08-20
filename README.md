@@ -32,12 +32,16 @@ assets/js/
   ui/                      ← component dùng chung
   screens/                 ← 5 màn hình
   app.js                   ← state + nối dây
-backend/                   ← Apps Script, 9 file .gs (xem backend/README.md)
+backend/                   ← Apps Script, 10 file .gs (xem backend/README.md)
 docs/
+  SETUP.md                 ← dựng spreadsheet + backend của riêng bạn từ số 0
   ARCHITECTURE.md          ← quy ước code, sửa gì ở đâu
   SHEETS.md                ← cấu trúc Google Sheets
   TODO.md                  ← bug và tính năng đang chờ
 ```
+
+**Muốn chạy trên spreadsheet của riêng bạn?** Làm theo [docs/SETUP.md](docs/SETUP.md) —
+có script tự dựng cả 7 sheet, khỏi gõ tay.
 
 Bắt đầu đọc code từ [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 

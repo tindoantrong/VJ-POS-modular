@@ -1,5 +1,10 @@
 /* VJ·POS — cấu hình toàn app. File này nạp ĐẦU TIÊN, mọi file khác đọc qua window.VJ.
-   ĐỔI URL API Ở ĐÂY, không hardcode chỗ nào khác.
+
+   API: URL Web App của Apps Script gắn với Google Spreadsheet dùng làm database.
+        ĐỔI URL NÀY = TRỎ APP SANG MỘT SPREADSHEET KHÁC HOÀN TOÀN.
+        Muốn dùng spreadsheet của riêng mình: làm theo docs/SETUP.md rồi dán URL mới vào đây.
+        ⚠️ URL này trình duyệt tải về được nên coi như công khai — xem mục bảo mật ở SETUP.md.
+
    BUILD_VERSION: mỗi lần deploy nhớ bump, và sửa luôn ?v= trong index.html để iPhone không dùng cache cũ. */
 window.VJ = window.VJ || {};
 
