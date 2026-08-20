@@ -1,0 +1,245 @@
+/* VJ·SHOP — trang bán gạo cho khách lẻ.
+   Bảng màu lấy từ bao bì: xanh lá đậm + vàng đồng + nền kem.
+   Hoàn toàn tách biệt CSS của POS (tokens/layout/components/screens) — POS là app tối
+   dùng trong tiệm, trang này là trang bán hàng sáng cho khách. Đừng trộn hai bộ. */
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+
+:root{
+  --green:#14532D; --green-2:#1E7A46; --green-soft:#E8F1EA;
+  --gold:#C8A44A; --gold-soft:#F5EAD0;
+  --cream:#FBF7EC; --paper:#FFFFFF;
+  --ink:#22271F; --ink-2:#5A6157; --ink-3:#8B9187;
+  --line:#E4E0D3; --red:#C0392B; --ok:#1E7A46;
+  --r:16px; --rs:10px;
+  --sb:env(safe-area-inset-bottom,0px);
+  --shadow:0 2px 16px rgba(20,83,45,.07);
+  --shadow-lg:0 12px 40px rgba(20,83,45,.16);
+}
+
+body{background:var(--cream);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;line-height:1.55;
+  -webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+input,textarea,select{font-family:inherit;font-size:16px} /* 16px để iPhone không tự zoom khi focus */
+
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+
+/* ═══ Header ═══ */
+.hd{position:sticky;top:0;z-index:60;background:rgba(251,247,236,.92);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line)}
+.hd-in{max-width:1120px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:16px}
+.hd-logo{display:flex;align-items:center;gap:10px;margin-right:auto;min-width:0}
+.hd-mark{width:40px;height:40px;border-radius:50%;background:var(--green);color:var(--gold);
+  display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.hd-name{font-weight:700;font-size:15px;letter-spacing:.14em;color:var(--green);line-height:1.15}
+.hd-sub{font-size:10px;letter-spacing:.2em;color:var(--ink-3)}
+.hd-tel{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:var(--green);
+  white-space:nowrap}
+.hd-cart{position:relative;width:44px;height:44px;border-radius:12px;background:var(--green);
+  color:#fff;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;
+  transition:transform .15s}
+.hd-cart:active{transform:scale(.94)}
+.hd-cart-n{position:absolute;top:-5px;right:-5px;min-width:21px;height:21px;border-radius:11px;
+  background:var(--gold);color:var(--green);font-size:11px;font-weight:800;display:flex;
+  align-items:center;justify-content:center;padding:0 5px;border:2px solid var(--cream)}
+
+/* ═══ Hero ═══ */
+.hero{background:linear-gradient(135deg,var(--green) 0%,#0E3A20 100%);color:#fff;
+  padding:52px 0 56px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 80% 20%,rgba(200,164,74,.18),transparent 55%)}
+.hero-in{position:relative;z-index:1;text-align:center;max-width:640px;margin:0 auto}
+.hero-kicker{display:inline-block;font-size:12px;letter-spacing:.22em;color:var(--gold);
+  border:1px solid rgba(200,164,74,.45);border-radius:99px;padding:5px 16px;margin-bottom:18px}
+.hero h1{font-size:clamp(28px,6vw,44px);line-height:1.15;font-weight:800;margin-bottom:14px}
+.hero h1 em{font-style:normal;color:var(--gold)}
+.hero p{font-size:16px;color:rgba(255,255,255,.82);margin-bottom:26px}
+.hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:var(--green);
+  font-weight:700;font-size:16px;padding:14px 30px;border-radius:99px;transition:transform .15s}
+.hero-cta:active{transform:scale(.97)}
+
+/* ═══ Thanh cam kết ═══ */
+.trust{background:var(--paper);border-bottom:1px solid var(--line)}
+.trust-in{max-width:1120px;margin:0 auto;padding:18px 20px;display:grid;
+  grid-template-columns:repeat(4,1fr);gap:14px}
+.trust-it{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:var(--ink-2)}
+.trust-ic{width:34px;height:34px;border-radius:50%;background:var(--green-soft);color:var(--green);
+  display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+
+/* ═══ Khu sản phẩm ═══ */
+.sec{padding:52px 0}
+.sec-hd{text-align:center;margin-bottom:34px}
+.sec-hd h2{font-size:clamp(24px,4.5vw,32px);color:var(--green);font-weight:800;margin-bottom:8px}
+.sec-hd p{color:var(--ink-2);font-size:15px}
+
+.pgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+.pcard{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
+  box-shadow:var(--shadow);display:flex;flex-direction:column}
+.pmedia{position:relative;aspect-ratio:4/3;background:linear-gradient(135deg,var(--green-soft),var(--gold-soft));
+  overflow:hidden}
+.pmedia img{width:100%;height:100%;object-fit:cover}
+/* Ảnh chưa có / lỗi thì hiện khối thay thế, không để vỡ layout */
+.pmedia-fb{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:6px;color:var(--green);text-align:center;padding:16px}
+.pmedia-fb-ic{font-size:44px}
+.pmedia-fb-t{font-size:15px;font-weight:700;letter-spacing:.04em}
+.pmedia-fb-s{font-size:11px;color:var(--ink-3)}
+.pbadge{position:absolute;top:12px;left:12px;background:var(--gold);color:var(--green);
+  font-size:11px;font-weight:800;padding:5px 12px;border-radius:99px;letter-spacing:.04em;z-index:2}
+
+.pbody{padding:20px;display:flex;flex-direction:column;flex:1}
+.pname{font-size:22px;font-weight:800;color:var(--green);line-height:1.2}
+.ptag{font-size:13px;color:var(--gold);font-weight:600;margin-top:3px}
+.pdesc{font-size:14px;color:var(--ink-2);margin-top:10px}
+.phl{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.phl span{font-size:11.5px;font-weight:600;color:var(--green);background:var(--green-soft);
+  padding:4px 10px;border-radius:99px}
+
+.pvar{display:flex;gap:8px;margin-top:18px}
+.pvar button{flex:1;padding:10px 6px;border-radius:var(--rs);border:1.5px solid var(--line);
+  background:var(--paper);text-align:center;transition:all .15s}
+.pvar button.on{border-color:var(--green);background:var(--green-soft)}
+.pvar-l{font-size:12px;color:var(--ink-2);font-weight:600}
+.pvar button.on .pvar-l{color:var(--green)}
+.pvar-p{font-size:15px;font-weight:800;color:var(--ink);margin-top:2px}
+.pvar button.on .pvar-p{color:var(--green)}
+
+.pfoot{margin-top:auto;padding-top:18px;display:flex;align-items:center;gap:12px}
+.qty{display:flex;align-items:center;border:1.5px solid var(--line);border-radius:var(--rs);
+  overflow:hidden;flex-shrink:0}
+.qty button{width:38px;height:42px;font-size:19px;color:var(--green);font-weight:700}
+.qty button:active{background:var(--green-soft)}
+.qty span{min-width:34px;text-align:center;font-weight:800;font-size:15px}
+.padd{flex:1;background:var(--green);color:#fff;font-weight:700;font-size:15px;padding:13px;
+  border-radius:var(--rs);transition:transform .15s,background .15s}
+.padd:active{transform:scale(.98);background:#0E3A20}
+
+/* ═══ Footer ═══ */
+.ft{background:var(--green);color:rgba(255,255,255,.8);padding:40px 0 calc(32px + var(--sb));margin-top:20px}
+.ft-in{max-width:1120px;margin:0 auto;padding:0 20px;display:grid;
+  grid-template-columns:1.4fr 1fr 1fr;gap:32px}
+.ft h4{color:#fff;font-size:15px;font-weight:700;margin-bottom:12px}
+.ft-brand{font-size:19px;font-weight:800;color:var(--gold);letter-spacing:.12em}
+.ft-brand-s{font-size:11px;letter-spacing:.2em;color:rgba(255,255,255,.6);margin-bottom:12px}
+.ft p,.ft a{font-size:14px;color:rgba(255,255,255,.8);text-decoration:none;margin-bottom:7px;display:block}
+.ft-note{border-top:1px solid rgba(255,255,255,.14);margin-top:28px;padding-top:18px;text-align:center;
+  font-size:12.5px;color:rgba(255,255,255,.55)}
+
+/* ═══ Nút giỏ hàng nổi (mobile) ═══ */
+.fab{position:fixed;left:16px;right:16px;bottom:calc(16px + var(--sb));z-index:70;
+  background:var(--green);color:#fff;border-radius:99px;padding:15px 22px;display:flex;
+  align-items:center;justify-content:space-between;gap:12px;box-shadow:var(--shadow-lg);
+  font-weight:700;font-size:15px;animation:fabin .25s ease-out}
+@keyframes fabin{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.fab-n{background:var(--gold);color:var(--green);border-radius:99px;padding:2px 10px;font-size:13px;font-weight:800}
+
+/* ═══ Overlay + bottom sheet ═══ */
+.ov{position:fixed;inset:0;background:rgba(20,27,20,.55);z-index:100;display:flex;
+  align-items:flex-end;justify-content:center;animation:fade .18s ease-out}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes slide{from{transform:translateY(100%)}to{transform:none}}
+.sheet{background:var(--cream);width:100%;max-width:560px;max-height:92vh;border-radius:22px 22px 0 0;
+  display:flex;flex-direction:column;animation:slide .28s cubic-bezier(.32,.72,0,1);overflow:hidden}
+.sheet-hd{padding:18px 20px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;
+  gap:12px;background:var(--paper);flex-shrink:0}
+.sheet-hd h3{font-size:18px;font-weight:800;color:var(--green);margin-right:auto}
+.sheet-x{width:34px;height:34px;border-radius:50%;background:var(--green-soft);color:var(--green);
+  display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.sheet-bd{padding:18px 20px;overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch}
+.sheet-ft{padding:16px 20px calc(18px + var(--sb));border-top:1px solid var(--line);
+  background:var(--paper);flex-shrink:0}
+
+/* ═══ Dòng trong giỏ ═══ */
+.ci{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.ci:last-child{border-bottom:none}
+.ci-img{width:62px;height:62px;border-radius:var(--rs);flex-shrink:0;overflow:hidden;
+  background:linear-gradient(135deg,var(--green-soft),var(--gold-soft));display:flex;
+  align-items:center;justify-content:center;font-size:26px}
+.ci-img img{width:100%;height:100%;object-fit:cover}
+.ci-bd{flex:1;min-width:0}
+.ci-n{font-weight:700;font-size:15px;color:var(--ink)}
+.ci-v{font-size:12.5px;color:var(--ink-3);margin-bottom:8px}
+.ci-row{display:flex;align-items:center;gap:10px}
+.ci-p{margin-left:auto;font-weight:800;color:var(--green);font-size:15px;white-space:nowrap}
+.ci-rm{color:var(--ink-3);font-size:12.5px;text-decoration:underline;padding:4px 0}
+.ci-rm:active{color:var(--red)}
+.qty.sm button{width:32px;height:34px;font-size:16px}
+.qty.sm span{min-width:28px;font-size:14px}
+
+/* ═══ Bảng tổng ═══ */
+.sum{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-top:16px}
+.sum-r{display:flex;justify-content:space-between;align-items:center;font-size:14.5px;padding:5px 0;
+  color:var(--ink-2)}
+.sum-r b{color:var(--ink);font-weight:700}
+.sum-r.tot{border-top:1px solid var(--line);margin-top:8px;padding-top:12px;font-size:18px;color:var(--ink)}
+.sum-r.tot b{color:var(--green);font-weight:800;font-size:21px}
+.freeship{background:var(--gold-soft);border-radius:var(--rs);padding:10px 14px;font-size:13px;
+  color:#7A5C10;margin-top:12px;display:flex;gap:8px;align-items:flex-start}
+
+/* ═══ Nút chính ═══ */
+.btn{width:100%;padding:15px;border-radius:var(--rs);font-size:16px;font-weight:700;transition:all .15s}
+.btn:active{transform:scale(.985)}
+.btn-main{background:var(--green);color:#fff}
+.btn-main:active{background:#0E3A20}
+.btn-gold{background:var(--gold);color:var(--green)}
+.btn-ghost{background:transparent;color:var(--green);border:1.5px solid var(--green);margin-top:10px}
+.btn[disabled]{opacity:.5;pointer-events:none}
+
+/* ═══ Form ═══ */
+.fld{margin-bottom:14px}
+.fld label{display:block;font-size:13px;font-weight:700;color:var(--ink-2);margin-bottom:6px}
+.fld label i{color:var(--red);font-style:normal}
+.fld input,.fld textarea{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:var(--rs);
+  background:var(--paper);color:var(--ink);outline:none;transition:border-color .15s}
+.fld input:focus,.fld textarea:focus{border-color:var(--green)}
+.fld textarea{resize:vertical;min-height:74px}
+.fld.err input,.fld.err textarea{border-color:var(--red);background:#FEF6F5}
+.fld-err{font-size:12.5px;color:var(--red);margin-top:5px;font-weight:600}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0} /* honeypot, người thật không thấy */
+
+.pay{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pay button{padding:13px 10px;border:1.5px solid var(--line);border-radius:var(--rs);background:var(--paper);
+  text-align:left;display:flex;gap:10px;align-items:center;transition:all .15s}
+.pay button.on{border-color:var(--green);background:var(--green-soft)}
+.pay-ic{font-size:20px}
+.pay-t{font-size:13.5px;font-weight:700;color:var(--ink)}
+.pay-s{font-size:11.5px;color:var(--ink-3)}
+
+.alert{background:#FEF6F5;border:1px solid #F3C9C4;color:var(--red);border-radius:var(--rs);
+  padding:12px 14px;font-size:13.5px;font-weight:600;margin-bottom:14px}
+
+/* ═══ Đặt hàng thành công ═══ */
+.done{text-align:center;padding:14px 4px 4px}
+.done-ic{width:74px;height:74px;border-radius:50%;background:var(--green-soft);color:var(--green);
+  font-size:38px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;
+  animation:pop .4s cubic-bezier(.2,1.5,.4,1)}
+@keyframes pop{from{transform:scale(.4);opacity:0}to{transform:none;opacity:1}}
+.done h3{font-size:22px;color:var(--green);font-weight:800;margin-bottom:6px}
+.done p{font-size:14.5px;color:var(--ink-2);margin-bottom:18px}
+.done-code{background:var(--paper);border:2px dashed var(--gold);border-radius:var(--r);padding:16px;
+  margin-bottom:18px}
+.done-code-l{font-size:12px;color:var(--ink-3);letter-spacing:.1em;margin-bottom:4px}
+.done-code-v{font-size:27px;font-weight:800;color:var(--green);letter-spacing:.06em}
+
+.spin{width:26px;height:26px;border:3px solid rgba(255,255,255,.35);border-top-color:#fff;
+  border-radius:50%;animation:sp .8s linear infinite;margin:0 auto}
+@keyframes sp{to{transform:rotate(360deg)}}
+.load{text-align:center;padding:70px 20px;color:var(--ink-3)}
+.load .spin{border-color:var(--line);border-top-color:var(--green);margin-bottom:14px}
+
+/* ═══ Mobile ═══ */
+@media(max-width:860px){
+  .pgrid{grid-template-columns:1fr;gap:18px}
+  .ft-in{grid-template-columns:1fr;gap:24px}
+  .trust-in{grid-template-columns:repeat(2,1fr);gap:12px}
+  .sec{padding:38px 0}
+  .hero{padding:40px 0 44px}
+  .hd-tel span{display:none}
+  body.has-cart{padding-bottom:82px}
+}
+@media(min-width:861px){
+  .fab{display:none}
+  .sheet{border-radius:22px;max-height:88vh;margin-bottom:5vh}
+  .ov{align-items:center}
+}

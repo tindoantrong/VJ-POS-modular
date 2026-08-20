@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#14532D">
+<title>Gạo Sạch Từ Thiên Nhiên — Gạo ST25, ST500 giao tận nhà</title>
+<meta name="description" content="Mua gạo ST25, ST500 chính gốc, đóng túi 5kg và 10kg. Cơm dẻo thơm, không chất bảo quản. Giao hàng toàn quốc, thanh toán khi nhận hàng.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌾</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet">
+
+<!-- Trang bán hàng dùng BỘ CSS RIÊNG, không nạp CSS của POS (index.html).
+     POS là app tối dùng trong tiệm, trang này là trang bán hàng sáng cho khách.
+     Nhớ bump ?v= mỗi lần deploy, khớp VJ.config.BUILD_VERSION. -->
+<link rel="stylesheet" href="assets/css/shop.css?v=2026-02-24-modular">
+
+<!-- Chia sẻ lên Facebook/Zalo -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Gạo Sạch Từ Thiên Nhiên — Gạo ST25, ST500">
+<meta property="og:description" content="Gạo Việt cho bữa cơm gia đình. Đặt hàng online, giao tận nhà toàn quốc.">
+<meta property="og:image" content="assets/img/st25-banner.jpg">
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+
+<!-- Dùng chung với POS: config (URL API) và hàm định dạng số -->
+<script src="assets/js/config.js?v=2026-02-24-modular"></script>
+<script src="assets/js/lib/format.js?v=2026-02-24-modular"></script>
+<script src="assets/js/api/client.js?v=2026-02-24-modular"></script>
+
+<!-- Riêng của trang bán hàng. THỨ TỰ QUAN TRỌNG: products → cart → api → ui → app -->
+<script src="assets/js/shop/products.js?v=2026-02-24-modular"></script>
+<script src="assets/js/shop/cart.js?v=2026-02-24-modular"></script>
+<script src="assets/js/shop/api.js?v=2026-02-24-modular"></script>
+
+<script src="assets/js/shop/ui/ShopError.js?v=2026-02-24-modular"></script>
+<script src="assets/js/shop/ui/ProductCard.js?v=2026-02-24-modular"></script>
+<script src="assets/js/shop/ui/CartSheet.js?v=2026-02-24-modular"></script>
+<script src="assets/js/shop/ui/CheckoutForm.js?v=2026-02-24-modular"></script>
+<script src="assets/js/shop/ui/OrderSuccess.js?v=2026-02-24-modular"></script>
+
+<script src="assets/js/shop/app.js?v=2026-02-24-modular"></script>
+</body>
+</html>

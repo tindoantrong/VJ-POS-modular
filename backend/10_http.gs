@@ -20,10 +20,13 @@ function doGet(e) {
       case "staff": return getStaffPublic();
       case "artists": return getArtists();
       case "orders": return getOrders();
+      // PUBLIC — bảng giá cho trang bán hàng khách lẻ (shop.html). Không cần PIN vì
+      // giá bán vốn là thông tin công khai, in trên bao bì.
+      case "shop_products": return getShopProducts();
       // Giữ lại để tương thích ngược. Frontend mới đăng nhập bằng POST (PIN không lọt vào URL).
       case "login": return login(params.pin || "");
       default:
-        return _ok_({ msg: "VJ-POS API", version: API_VERSION, actions: ["ping","schema","products","staff","artists","orders","login"] });
+        return _ok_({ msg: "VJ-POS API", version: API_VERSION, actions: ["ping","schema","products","staff","artists","orders","shop_products","login"] });
     }
   });
 }
@@ -41,7 +44,16 @@ function doPost(e) {
   if (action === "ping") return _json_(_ok_({ msg: "pong", version: API_VERSION }, reqId));
   if (action === "schema") return _json_(schemaReport(reqId));
 
-  // Mọi lệnh ghi đều phải có PIN hợp lệ
+  /* ═══ ENDPOINT PUBLIC — KHÁCH ĐẶT HÀNG, KHÔNG CẦN PIN ═══
+     Đây là lối ghi duy nhất không qua xác thực, nên submitCustomerOrder phải tự lo:
+     tính lại giá từ SHOP_CATALOG (không tin client), giới hạn tần suất, honeypot.
+     Nó chỉ ghi vào Shop_Orders — KHÔNG đụng Orders, KHÔNG trừ kho.
+     Thêm action public mới ở đây phải cân nhắc rất kỹ. */
+  if (action === "customer_order") {
+    return _handle_(reqId, "POST", action, function () { return submitCustomerOrder(body.value); });
+  }
+
+  // Mọi lệnh ghi còn lại đều phải có PIN hợp lệ
   const pin = String(body.value.pin || "").trim();
   const auth = _validatePin_(pin);
   if (!auth) return _json_(_err_("Invalid PIN", null, reqId));

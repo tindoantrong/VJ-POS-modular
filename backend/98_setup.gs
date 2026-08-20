@@ -52,6 +52,20 @@ const SHEET_TEMPLATES = {
     "log_id", "timestamp", "product_id", "change_type",
     "qty_change", "qty_before", "qty_after", "reference", "changed_by"
   ],
+
+  /* ── Đơn từ trang bán hàng khách lẻ (shop.html) ──
+     Tách hẳn khỏi Orders của POS: đây mới là đơn CHỜ XÁC NHẬN, chưa trừ kho,
+     chưa tính hoa hồng. Nhân viên gọi xác nhận rồi mới lên đơn POS thật. */
+  Shop_Orders: [
+    "shop_order_id", "created_at", "customer_name", "customer_phone", "customer_address",
+    "note", "payment_method", "items_total", "shipping_fee", "grand_total",
+    "status", "handled_by", "handled_at"
+  ],
+
+  Shop_Order_Items: [
+    "shop_order_item_id", "shop_order_id", "product_id", "product_name",
+    "variant", "qty", "unit_price", "line_total"
+  ],
 };
 
 /* ═══ CHẠY HÀM NÀY ĐẦU TIÊN ═══
