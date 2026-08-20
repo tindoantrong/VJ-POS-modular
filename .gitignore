@@ -1,6 +1,11 @@
 # Ảnh gốc chưa nén — chỉ commit bản .jpg đã tối ưu. Xem assets/img/README.md
 assets/img/*.png
 
+# Cấu hình clasp — gắn với script project và tài khoản Google của từng người, không commit.
+# Tạo lại bằng: python .claude/skills/vjpos-deploy/vjpos_deploy.py init --script-id <ID>
+.clasp.json
+.claspignore
+
 # File tạm khi test
 _smoketest.html
 _shoptest.html
