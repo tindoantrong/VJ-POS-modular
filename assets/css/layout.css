@@ -1,0 +1,20 @@
+/* VJ·POS — khung màn hình. ĐÂY LÀ FILE DỄ VỠ NHẤT, sửa xong phải test trên iPhone Safari.
+   Cấu trúc: .app (100dvh, overflow:hidden)
+               ├─ .top           flex-shrink:0  — header, có safe-area cho tai thỏ
+               ├─ .search-sticky flex-shrink:0  — search + filter, NẰM NGOÀI .main nên không cuộn theo
+               ├─ .main          flex:1, overflow-y:auto — vùng cuộn duy nhất
+               └─ .tabs          position:fixed bottom */
+.app{max-width:430px;margin:0 auto;height:100vh;height:100dvh;display:flex;flex-direction:column;background:var(--bg);position:relative;overflow:hidden}
+.main{flex:1;min-height:0;overflow-y:auto;padding-bottom:90px;-webkit-overflow-scrolling:touch}
+/* FIX #1: Safe area top padding for iPhone notch/Dynamic Island */
+.top{padding:12px 16px 8px;padding-top:calc(var(--st) + 12px);display:flex;align-items:center;justify-content:space-between;z-index:50;background:var(--bg);border-bottom:1px solid rgba(176,196,216,0.08);flex-shrink:0}
+.logo{font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:var(--gold);letter-spacing:2px;text-shadow:0 0 20px rgba(126,184,218,0.3)}
+.tabs{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(16,18,26,0.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid rgba(176,196,216,0.08);display:flex;padding:8px 0 calc(8px + var(--sb));z-index:100}
+.tb{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;cursor:pointer;border:none;background:none;font-family:inherit;position:relative}
+.tb-i{font-size:22px;filter:grayscale(1) opacity(0.4);transition:all 0.2s}.tb.on .tb-i{filter:none}
+.tb-l{font-size:10px;color:var(--t3);font-weight:500}.tb.on .tb-l{color:var(--gold);font-weight:600}
+.badge{position:absolute;top:2px;right:calc(50% - 18px);background:var(--red);color:#fff;font-size:10px;font-weight:700;min-width:18px;height:18px;border-radius:9px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+/* Search bar — fixed above scroll area, never scrolls away */
+.search-sticky{background:var(--bg);padding-bottom:6px;border-bottom:1px solid rgba(176,196,216,0.06);flex-shrink:0}
+.osec{padding:16px}
+.fin{animation:fi 0.2s ease-out}

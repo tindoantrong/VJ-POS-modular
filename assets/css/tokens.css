@@ -1,0 +1,4 @@
+/* VJ·POS — design tokens + reset. Đổi màu/bo góc/font ở đây, không sửa chỗ khác. */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--bg:#08090C;--s1:#10121A;--s2:#181B24;--s3:#22252F;--brd:#2A2D3A;--t:#E8ECF2;--t2:#8A90A0;--t3:#525870;--gold:#B0C4D8;--gold-dim:#5A7A94;--green:#34D399;--red:#F87171;--blue:#60A5FA;--accent2:#7EB8DA;--r:14px;--rs:8px;--sb:env(safe-area-inset-bottom,16px);--st:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--t);font-family:'DM Sans',sans-serif}

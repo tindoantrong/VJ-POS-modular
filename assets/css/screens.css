@@ -1,0 +1,77 @@
+/* VJ·POS — style riêng của từng màn hình. Mỗi khối tương ứng 1 file trong assets/js/screens/ */
+
+/* ═══ Login.js — bàn phím PIN ═══ */
+.login{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:40px 32px;padding-top:calc(var(--st) + 40px);text-align:center;overflow-y:auto}
+.login-logo{font-family:'Space Mono',monospace;font-size:32px;font-weight:700;color:var(--gold);letter-spacing:4px;margin-bottom:8px;text-shadow:0 0 30px rgba(126,184,218,0.4)}
+.login-sub{font-size:14px;color:var(--t3);margin-bottom:40px}
+.pin-dots{display:flex;gap:16px;margin-bottom:32px}
+.pin-dot{width:16px;height:16px;border-radius:8px;border:2px solid var(--brd);transition:all .15s}
+.pin-dot.filled{background:var(--gold);border-color:var(--gold);box-shadow:0 0 8px rgba(126,184,218,0.4)}
+.pin-dot.err{background:var(--red);border-color:var(--red);animation:shake .3s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:280px;width:100%}
+.nk{width:100%;aspect-ratio:1.3;border-radius:16px;border:1px solid var(--brd);background:var(--s1);color:var(--t);font-size:28px;font-weight:500;font-family:'Space Mono',monospace;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .1s;-webkit-user-select:none;user-select:none}
+.nk:active{background:linear-gradient(135deg,var(--gold),var(--accent2));color:var(--bg);transform:scale(.95);box-shadow:0 0 16px rgba(126,184,218,0.2)}
+.nk.fn{font-size:16px;border:none;background:none;color:var(--t3)}
+
+/* ═══ Login.js — màn chào + hoa hồng ═══ */
+.welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:40px 32px;padding-top:calc(var(--st) + 40px);text-align:center;overflow-y:auto;animation:fi 0.3s ease-out}
+.welcome-card{background:var(--s1);border:1px solid var(--brd);border-radius:20px;padding:28px 24px;width:100%;max-width:340px;margin-bottom:20px;box-shadow:0 8px 32px rgba(0,0,0,0.3)}
+.welcome-name{font-size:22px;font-weight:700;margin-bottom:4px;color:var(--t)}
+.welcome-role{font-size:13px;color:var(--t2);text-transform:uppercase;letter-spacing:1px;margin-bottom:20px}
+.comm-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.comm-box{background:var(--s2);border:1px solid var(--brd);border-radius:14px;padding:16px 12px;text-align:center}
+.comm-box.active{border-color:var(--accent2);box-shadow:0 0 16px rgba(126,184,218,0.08)}
+.comm-label{font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px}
+.comm-val{font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:var(--gold)}
+.comm-box.active .comm-val{color:var(--accent2)}
+
+/* ═══ Products.js — lưới sản phẩm ═══ */
+.pgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:8px 16px 16px}
+.pcard{background:var(--s1);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s;border:1px solid var(--brd);position:relative}.pcard:active{transform:scale(0.97);box-shadow:0 0 20px rgba(126,184,218,0.08)}
+.pcard.oos{opacity:0.45;pointer-events:none}
+.pimg{width:100%;aspect-ratio:1;background:var(--s2);display:flex;align-items:center;justify-content:center;font-size:36px;position:relative;overflow:hidden}
+.pimg img{width:100%;height:100%;object-fit:cover}
+.pbadge{position:absolute;top:8px;left:8px;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700;color:#fff;font-family:'Space Mono',monospace;letter-spacing:0.5px}
+.pstock{position:absolute;top:8px;right:8px;padding:2px 6px;border-radius:6px;font-size:9px;font-weight:600;background:rgba(0,0,0,0.6)}
+.pinfo{padding:10px}.pname{font-size:12px;font-weight:500;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:6px}
+.pprice{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--gold)}.pid{font-family:'Space Mono',monospace;font-size:10px;color:var(--t3);margin-top:2px}
+.pcnt{padding:0 16px 4px;font-size:12px;color:var(--t3)}
+.p-added{position:absolute;inset:0;background:rgba(126,184,218,0.12);display:flex;align-items:center;justify-content:center;z-index:5;animation:fadepulse 0.6s ease-out forwards;pointer-events:none}
+@keyframes fadepulse{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.1)}}
+.p-added-icon{font-size:48px;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.5))}
+.p-cart-qty{position:absolute;bottom:8px;right:8px;background:var(--gold);color:var(--bg);font-size:11px;font-weight:700;width:22px;height:22px;border-radius:11px;display:flex;align-items:center;justify-content:center;z-index:6;font-family:'Space Mono',monospace}
+
+/* ═══ Order.js — thanh draft (nhiều đơn cùng lúc) ═══ */
+.drafts-bar{display:flex;gap:6px;padding:0 16px;overflow-x:auto;scrollbar-width:none;margin-bottom:8px}
+.drafts-bar::-webkit-scrollbar{display:none}
+.draft-tab{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;border:1px solid var(--brd);background:var(--s2);color:var(--t2);font-size:12px;font-weight:500;cursor:pointer;white-space:nowrap;flex-shrink:0;font-family:'DM Sans',sans-serif;transition:all 0.15s}
+.draft-tab.on{background:linear-gradient(135deg,rgba(126,184,218,0.25),rgba(176,196,216,0.2));color:var(--t);border-color:var(--accent2);font-weight:600;box-shadow:0 0 12px rgba(126,184,218,0.1)}
+.draft-tab .draft-close{font-size:14px;opacity:0.6;margin-left:2px;line-height:1}
+.draft-tab .draft-close:hover{opacity:1}
+.draft-add{padding:6px 10px;border-radius:20px;border:1px dashed var(--brd);background:none;color:var(--t3);font-size:14px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.15s}
+.draft-add:hover{border-color:var(--gold);color:var(--gold)}
+.draft-count{background:rgba(255,255,255,0.15);font-size:10px;padding:1px 5px;border-radius:8px;font-weight:700;font-family:'Space Mono',monospace}
+.draft-tab.on .draft-count{background:rgba(0,0,0,0.2);color:var(--t)}
+
+/* ═══ Orders.js — danh sách đơn ═══ */
+.oc{background:var(--s1);border:1px solid var(--brd);border-radius:var(--r);padding:14px;margin-bottom:10px;cursor:pointer;transition:border-color 0.15s}.oc:active{border-color:var(--gold-dim)}
+.oh{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.oid{font-family:'Space Mono',monospace;font-size:14px;font-weight:600}
+.ost{padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
+.st-paid{background:rgba(52,211,153,0.15);color:var(--green)}.st-partial{background:rgba(251,191,36,0.15);color:#FBBF24}.st-unpaid{background:rgba(248,113,113,0.15);color:var(--red)}
+.st-void{background:rgba(248,113,113,.15);color:var(--red)}
+.otot{font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:var(--gold);margin-top:6px}
+.oiprev{font-size:12px;color:var(--t3);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.oc.void{opacity:.4;border-left:3px solid var(--red)}
+
+/* ═══ PaymentModal.js — chọn hình thức thanh toán ═══ */
+.pmgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px}
+.pmb{padding:12px 8px;border-radius:var(--rs);border:1.5px solid var(--brd);background:var(--s2);color:var(--t2);font-size:13px;font-weight:500;cursor:pointer;text-align:center;transition:all 0.15s;font-family:'DM Sans',sans-serif}
+.pmb.on{border-color:var(--gold);color:var(--gold);background:rgba(126,184,218,0.08)}
+.pmi{font-size:20px;display:block;margin-bottom:4px}
+
+/* ═══ Admin.js — nhập kho hàng loạt ═══ */
+.imp-preview{background:var(--s2);border:1px solid var(--brd);border-radius:var(--rs);padding:12px;margin:12px 0;max-height:300px;overflow-y:auto;font-size:12px}
+.imp-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.03)}
+.imp-row.new{color:var(--green)}.imp-row.upd{color:var(--blue)}

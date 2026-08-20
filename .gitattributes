@@ -1,0 +1,6 @@
+# Apps Script backend là JavaScript — cho git/editor hiểu đúng
+*.gs linguist-language=JavaScript diff=javascript text eol=lf
+*.js text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.md text eol=lf

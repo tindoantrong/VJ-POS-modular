@@ -1,61 +1,88 @@
 # VJ·POS — Viet Jewelers Point of Sale
 
-Mobile-first POS web app for a jewelry business in Vietnam. Built as a single HTML file deployed via GitHub Pages.
+Ứng dụng bán hàng mobile-first cho tiệm trang sức tại Việt Nam. Frontend tĩnh trên GitHub Pages,
+backend là Google Apps Script, database là Google Sheets.
 
-**Live URL:** https://maipham1712-collab.github.io/VJ-Pos/
+**Live:** https://maipham1712-collab.github.io/VJ-Pos/
 
-## Tech Stack
+## Tech stack
 
-- **Frontend:** Single `index.html` — React 18 (CDN), vanilla CSS, no build step
-- **Backend API:** Google Apps Script web app (REST endpoints)
-- **Database:** Google Sheets (Products, Orders, Payments, Commission, etc.)
-- **Hosting:** GitHub Pages (this repo)
-- **Automation:** n8n self-hosted + Telegram bots
+- **Frontend:** React 18 qua CDN, CSS thuần, **không có build step**. Component viết bằng
+  `React.createElement` (không JSX).
+- **Backend:** Google Apps Script web app (REST)
+- **Database:** Google Sheets — `Admin_Products`, `Orders`, `Order_Items`, `Payments`,
+  `Admin_Staff`, `Admin_Artists`, `Admin_Stock_Log`
+- **Hosting:** GitHub Pages
+- **Tự động hoá:** n8n self-hosted + Telegram bot
 
-## How It Works
-
-- `index.html` is the entire app — HTML + CSS + JS in one file
-- React components are written with `createElement()` calls (no JSX, no build)
-- On load, it fetches products/orders/staff from the Google Apps Script API
-- Staff log in with a 4-digit PIN → validated against the Staff sheet
-- Products tab → browse/search → tap to add to cart → Order tab → checkout
-- Orders saved to Google Sheets via POST to the Apps Script endpoint
-
-## API Endpoint
+## Cấu trúc thư mục
 
 ```
-GET:  https://script.google.com/.../exec?action=products|staff|orders|login&pin=XXXX
-POST: https://script.google.com/.../exec  (body: JSON with action field)
+index.html                 ← khung HTML + danh sách script (không chứa logic)
+assets/css/
+  tokens.css               ← màu, bo góc, font
+  layout.css               ← khung .app/.top/.main/.tabs  (dễ vỡ nhất)
+  components.css           ← nút, sheet, form, giỏ hàng, bảng tổng
+  screens.css              ← style riêng từng màn hình
+assets/js/
+  config.js                ← URL API, phí thẻ, BUILD_VERSION
+  lib/                     ← format số, bảng brand/icon
+  api/client.js            ← nơi DUY NHẤT gọi fetch
+  domain/                  ← công thức tiền + quản lý đơn nháp (hàm thuần)
+  ui/                      ← component dùng chung
+  screens/                 ← 5 màn hình
+  app.js                   ← state + nối dây
+backend/                   ← Apps Script, 9 file .gs (xem backend/README.md)
+docs/
+  ARCHITECTURE.md          ← quy ước code, sửa gì ở đâu
+  SHEETS.md                ← cấu trúc Google Sheets
+  TODO.md                  ← bug và tính năng đang chờ
 ```
 
-Actions: `submit_order`, `add_payment`, `void_order`, `bulk_import`
+Bắt đầu đọc code từ [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
-## Key Features
+## Cách hoạt động
 
-- PIN-based staff auth with role-based access (admin vs staff)
-- Product catalog with images, categories, brand filters
-- Cart with per-item and bill-level discounts (fixed or %)
-- Card fee toggle (3%), shipping fee, order notes
-- Draft orders — work on multiple orders simultaneously
-- Order history with payment tracking (paid/partial/unpaid)
-- Admin: bulk stock import, void orders
-- Commission calculation per vendor type
+1. Nhân viên nhập PIN 4 số → xác thực với sheet `Admin_Staff` → màn chào hiện hoa hồng
+   tháng này và tháng trước
+2. Tab Products → tìm/lọc → chạm để thêm vào giỏ
+3. Tab Order → sửa số lượng/giá, giảm giá từng dòng và cả bill, phí thẻ 3%, phí ship → Submit
+4. Đơn ghi vào Google Sheets, tồn kho tự trừ, ghi log biến động kho
+5. Tab Orders → theo dõi công nợ, thu tiền nhiều lần, admin huỷ đơn (tự hoàn kho)
 
-## File Structure
+Nhân viên mở được **nhiều đơn nháp** cùng lúc và chuyển qua lại — khách A đang chọn thì
+vẫn tính được cho khách B.
 
-```
-index.html    ← Entire app (HTML + CSS + React JS)
-README.md     ← This file
-TODO.md       ← Current bugs and planned features
-```
+## Tính năng
 
-## Development
+- Đăng nhập PIN, phân quyền admin / staff
+- Danh mục có ảnh, lọc theo loại hàng và brand
+- Giỏ hàng: sửa giá, giảm giá theo tiền hoặc %, cả dòng lẫn cả bill
+- Phí thẻ 3%, phí ship, ghi chú đơn
+- Nhiều đơn nháp song song
+- Lịch sử đơn + trạng thái thanh toán (paid / partial / unpaid)
+- Huỷ đơn kèm hoàn kho (chỉ admin)
+- Tính hoa hồng theo brand
+- Nhập kho hàng loạt bằng cách dán từ spreadsheet (chỉ admin)
 
-1. Edit `index.html` directly on GitHub or locally
-2. Commit to `main` branch
-3. GitHub Pages auto-deploys (may take 1-2 min)
-4. Hard refresh on device to see changes (`?v=timestamp` if cached)
+## Phát triển
 
-## Known Issue — Search Bar Not Sticky
+Chạy local qua web server bất kỳ (WAMP/XAMPP: đặt trong `www/`, mở
+`http://localhost/VJ-Pos/`). Mở thẳng bằng `file://` cũng chạy vì không dùng ES module.
 
-See `TODO.md` for details. The search bar on the Products tab scrolls away with the product grid instead of staying pinned below the header. Multiple approaches tried (position:sticky, flex layout, position:fixed) — needs debugging on actual iPhone.
+Deploy frontend: commit lên `main`, GitHub Pages tự build 1–2 phút.
+
+> ⚠️ **Mỗi lần deploy phải bump version cache-busting**, nếu không iPhone dùng file cũ:
+> sửa `BUILD_VERSION` trong [assets/js/config.js](assets/js/config.js) và Find & Replace
+> toàn bộ `?v=...` trong [index.html](index.html) cho khớp.
+
+Deploy backend: xem [backend/README.md](backend/README.md).
+
+## Chẩn đoán nhanh
+
+| Triệu chứng | Kiểm tra |
+|---|---|
+| App không tải được dữ liệu | Mở `<API_URL>?action=ping` |
+| Sai tên/giá sản phẩm, thiếu cột | Mở `<API_URL>?action=schema` |
+| Sửa code rồi mà máy không đổi | Chưa bump `?v=` — xem mục Phát triển |
+| Màn hình đen | ErrorBoundary sẽ hiện nút Reload kèm thông báo lỗi |
