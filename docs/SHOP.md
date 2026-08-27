@@ -114,6 +114,34 @@ backend/80_shop.gs             bảng giá, tính tiền, chống spam, ghi Shop
 Dùng chung với POS: `assets/js/config.js` (URL API), `assets/js/lib/format.js`,
 `assets/js/api/client.js`.
 
+## Chạy trên GitHub Pages
+
+Site tĩnh, không có bước build — Pages phục vụ thẳng file trong repo.
+
+```
+Nguồn:  branch main, thư mục / (root)
+Trang bán hàng:  https://tindoantrong.github.io/VJ-POS-modular/
+POS nhân viên:   https://tindoantrong.github.io/VJ-POS-modular/pos.html
+```
+
+Deploy = `git push origin main`. Pages tự dựng lại sau khoảng 1 phút.
+
+Ba cạm bẫy đã gặp, đừng đạp lại:
+
+- **Pages chạy Linux, phân biệt hoa thường.** Máy Windows ở nhà thì không, nên `Products.js`
+  viết nhầm thành `products.js` vẫn chạy ở local mà 404 trên Pages. Kiểm trước khi push:
+  đối chiếu mọi `src=`/`href=` trong `index.html`, `pos.html` với `git ls-files`.
+- **Site nằm ở thư mục con `/VJ-POS-modular/`.** Mọi đường dẫn phải tương đối
+  (`assets/...`), viết `/assets/...` là gãy hết.
+- **`og:image` và `og:url` phải là URL tuyệt đối.** Facebook/Zalo quét trang từ server của
+  họ, không giải được đường dẫn tương đối → ảnh xem trước trống.
+
+File `.nojekyll` ở root để Pages bỏ qua Jekyll, phục vụ file y nguyên.
+
+`pos.html` cũng công khai theo. Đây là chủ ý: ai biết link vẫn chỉ thấy màn PIN,
+không có mã thì không vào được. URL API trong `config.js` vốn đã công khai —
+trình duyệt tải về được — nên backend tự lo phần bảo vệ, xem mục bảo mật ở trên.
+
 ## Cài đặt
 
 Spreadsheet cần thêm 2 sheet `Shop_Orders` và `Shop_Order_Items` — chạy lại
