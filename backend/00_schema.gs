@@ -15,6 +15,12 @@ const SS = SpreadsheetApp.getActiveSpreadsheet();
 const API_VERSION = "2.3.0";
 const TZ = Session.getScriptTimeZone();
 
+/* Vòng đời đơn từ trang bán hàng khách lẻ: NEW → CONFIRMED → SHIPPED → DONE, hoặc CANCELLED.
+   NGUỒN SỰ THẬT DUY NHẤT — 80_shop.gs ghi trạng thái đầu tiên từ đây, 85_shop_admin.gs
+   dựng dropdown và bảng màu cũng từ đây. Thêm trạng thái mới thì thêm ở đây, rồi bổ sung
+   màu trong SHOP_STATUS_STYLE và chạy lại setupShopOrdersUi(). */
+const SHOP_STATUSES = ["NEW", "CONFIRMED", "SHIPPED", "DONE", "CANCELLED"];
+
 // Loại hàng không trừ tồn kho (dịch vụ làm tại chỗ)
 const SERVICE_TYPES = ["Service", "GRILLZ", "TOOTHGEM", "TOOTHCHARM", "Dịch vụ"];
 

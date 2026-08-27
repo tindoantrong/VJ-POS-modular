@@ -129,10 +129,16 @@ function setupNewSpreadsheet() {
   // Xoá sheet "Sheet1"/"Trang tính1" mặc định nếu còn trống
   _removeDefaultEmptySheet_();
 
+  /* Dropdown + màu cho cột status của Shop_Orders. Bọc try vì đây chỉ là tiện nghi
+     hiển thị — hỏng thì cũng không được làm chết việc dựng sheet. */
+  let shopUi = "bỏ qua";
+  try { shopUi = JSON.stringify(_applyShopOrdersUi_()); } catch (err) { shopUi = "lỗi: " + err; }
+
   const report = {
     ok: true,
     created: created,
     skipped: skipped,
+    shopOrdersUi: shopUi,
     next: "Chạy tiếp seedStarterData() nếu muốn có sẵn 1 tài khoản quản lý để đăng nhập thử."
   };
   Logger.log(JSON.stringify(report, null, 2));

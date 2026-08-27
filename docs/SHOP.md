@@ -20,6 +20,41 @@ rồi mới lên đơn thật trên POS.
 Vòng đời: `NEW` → `CONFIRMED` → `SHIPPED` → `DONE` (hoặc `CANCELLED`).
 Cột `handled_by` / `handled_at` để biết ai xử lý, lúc nào.
 
+Danh sách trạng thái khai ở `SHOP_STATUSES` trong [00_schema.gs](../backend/00_schema.gs) —
+**một chỗ duy nhất**, cả lúc ghi đơn lẫn lúc dựng dropdown đều đọc từ đó.
+
+## Nhân viên đổi trạng thái ở đâu
+
+Ngay trong spreadsheet, tab `Shop_Orders`. Chưa có màn hình nào trong POS làm việc này.
+
+Mở sheet lên sẽ thấy menu **VJ-POS** cạnh menu Help. Bấm vào một ô bất kỳ trên dòng đơn
+cần đổi (bôi đen nhiều dòng thì đổi cả loạt), rồi chọn:
+
+| Menu | Ghi vào sheet |
+|---|---|
+| ✅ Đã gọi, xác nhận đơn | `status = CONFIRMED` |
+| 🚚 Đã giao cho shipper | `status = SHIPPED` |
+| 🎉 Giao xong, hoàn tất | `status = DONE` |
+| ✖️ Huỷ đơn | `status = CANCELLED` |
+| ↩️ Trả về chưa gọi | `status = NEW` |
+
+Mỗi lần bấm, `handled_by` (email Google của người bấm) và `handled_at` được điền tự động —
+đây là lý do nên bấm menu thay vì gõ tay vào ô.
+
+Cột `status` cũng là **dropdown chặn gõ sai**, và cả dòng đổi màu theo trạng thái:
+nền đỏ nhạt = `NEW`, tức chưa ai gọi. Mở sheet ra là thấy ngay việc cần làm.
+
+> ⚠️ Đổi trạng thái ở đây **không trừ kho, không tính doanh thu**. Xác nhận xong vẫn phải
+> lên đơn thật trên POS — đó mới là đơn được tính.
+
+Code: [85_shop_admin.gs](../backend/85_shop_admin.gs). File này chỉ chạy khi có người mở
+spreadsheet (`onOpen`), không đụng `doGet`/`doPost`, nên sửa nó **không cần Deploy lại**
+web app — `push` là đủ.
+
+**Cài lần đầu / sau khi đổi `SHOP_STATUSES`:** menu VJ-POS → *🎨 Cài lại dropdown + màu cho
+Shop_Orders*. Chạy lại bao nhiêu lần cũng được. Sheet dựng mới bằng `setupNewSpreadsheet()`
+thì đã có sẵn, không phải bấm.
+
 ## Bảo mật: endpoint public thì không được tin client
 
 `customer_order` là lối ghi **duy nhất** không cần PIN, nên nó tự lo bảo vệ:

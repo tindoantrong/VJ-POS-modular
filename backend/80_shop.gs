@@ -151,7 +151,7 @@ function submitCustomerOrder(body) {
       items_total: itemsTotal,
       shipping_fee: shippingFee,
       grand_total: grandTotal,
-      status: "NEW",          // NEW → CONFIRMED → SHIPPED → DONE / CANCELLED
+      status: SHOP_STATUSES[0],   // "NEW" — vòng đời khai báo ở 00_schema.gs
       handled_by: "",
       handled_at: "",
     });
