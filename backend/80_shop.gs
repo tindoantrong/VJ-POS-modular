@@ -170,7 +170,10 @@ function submitCustomerOrder(body) {
       });
     }
 
-    _tryReprotect_("Shop_Orders");
+    /* KHÔNG khoá lại Shop_Orders — nhân viên phải sửa status / handled_by ngay trên sheet
+       (xem 85_shop_admin.gs). Protection cũ là setWarningOnly nên chưa từng chặn được ai,
+       nó chỉ bắt bấm "OK" mỗi lần gõ: phiền thật mà không an toàn thêm chút nào.
+       _tryUnprotect_ ở đầu khối vẫn giữ, nên mỗi đơn mới về là dọn luôn khoá còn sót lại. */
     _tryReprotect_("Shop_Order_Items");
 
     _shopRateLimitCommit_(phone);

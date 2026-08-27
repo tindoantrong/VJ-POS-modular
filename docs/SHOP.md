@@ -51,9 +51,18 @@ Code: [85_shop_admin.gs](../backend/85_shop_admin.gs). File này chỉ chạy kh
 spreadsheet (`onOpen`), không đụng `doGet`/`doPost`, nên sửa nó **không cần Deploy lại**
 web app — `push` là đủ.
 
-**Cài lần đầu / sau khi đổi `SHOP_STATUSES`:** menu VJ-POS → *🎨 Cài lại dropdown + màu cho
-Shop_Orders*. Chạy lại bao nhiêu lần cũng được. Sheet dựng mới bằng `setupNewSpreadsheet()`
-thì đã có sẵn, không phải bấm.
+**Cài lần đầu / sau khi đổi `SHOP_STATUSES`:** menu VJ-POS → *🎨 Cài lại dropdown + màu,
+gỡ khoá Shop_Orders*. Chạy lại bao nhiêu lần cũng được. Sheet dựng mới bằng
+`setupNewSpreadsheet()` thì đã có sẵn, không phải bấm.
+
+`Shop_Orders` **không bị khoá** như các sheet khác. Bản đầu mỗi đơn khách đặt đều khoá lại
+sheet, hệ quả là nhân viên bấm menu hay gõ tay đều bị Sheets hỏi "bạn có chắc không". Mà
+khoá đó là `setWarningOnly` — chỉ hỏi chứ chưa từng chặn được ai, cũng không chặn script.
+Phiền thật mà không an toàn thêm chút nào, nên bỏ. Sheet nào script ghi còn người không sửa
+(`Shop_Order_Items`, `Orders`, …) thì vẫn khoá như cũ.
+
+> Spreadsheet dựng từ bản cũ có thể còn khoá sót lại. Bấm *🎨 Cài lại dropdown + màu, gỡ
+> khoá Shop_Orders* một lần là xong; hoặc cứ để đơn mới về, `80_shop.gs` cũng tự gỡ.
 
 ## Bảo mật: endpoint public thì không được tin client
 

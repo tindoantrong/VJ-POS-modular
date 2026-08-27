@@ -39,7 +39,7 @@ function onOpen() {
       .addSeparator()
       .addItem("↩️ Trả về chưa gọi", "shopMarkNew")
       .addSeparator()
-      .addItem("🎨 Cài lại dropdown + màu cho Shop_Orders", "setupShopOrdersUi")
+      .addItem("🎨 Cài lại dropdown + màu, gỡ khoá Shop_Orders", "setupShopOrdersUi")
       .addToUi();
   } catch (_) {}
 }
@@ -163,7 +163,8 @@ function setupShopOrdersUi() {
     "Xong.\n\n" +
     "• Cột " + res.statusColumn + " (status) giờ là dropdown: " + SHOP_STATUSES.join(" · ") + "\n" +
     "• Gõ giá trị lạ sẽ bị từ chối\n" +
-    "• Cả dòng đổi màu theo trạng thái — nền đỏ nhạt là đơn chưa ai gọi"
+    "• Cả dòng đổi màu theo trạng thái — nền đỏ nhạt là đơn chưa ai gọi\n" +
+    "• Đã gỡ khoá sheet: sửa ô không còn bị hỏi \"bạn có chắc không\""
   );
 }
 
@@ -180,6 +181,11 @@ function _applyShopOrdersUi_() {
 
   const cStatus = _col_(_hmap_(ws), ["status"]);
   if (cStatus < 0) return { ok: false, error: "Sheet Shop_Orders không có cột 'status'." };
+
+  /* Gỡ protection nếu còn sót từ bản cũ. Trước đây mỗi đơn khách đặt đều khoá lại sheet
+     (setWarningOnly) khiến nhân viên phải bấm "OK" mỗi lần sửa ô. 80_shop.gs đã thôi khoá,
+     nhưng cái đã tạo thì vẫn nằm đó cho tới khi có người gỡ — chạy hàm này là gỡ. */
+  _tryUnprotect_("Shop_Orders");
 
   const maxRows = ws.getMaxRows();
   if (maxRows < 2) return { ok: false, error: "Sheet Shop_Orders chưa có dòng nào dưới header." };
